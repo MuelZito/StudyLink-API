@@ -20,7 +20,7 @@ public class Tarefa {
     @JsonBackReference
     private Usuario usuario;
 
-    public Tarefa(){
+    public Tarefa() {
     }
 
     public Long getId() {
@@ -77,5 +77,13 @@ public class Tarefa {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public void update(Tarefa tarefa) {
+        this.titulo = tarefa.getTitulo();
+        this.data_inicio = tarefa.getData_inicio();
+        this.data_fim = tarefa.getData_fim();
+        this.concluida = tarefa.isConcluida();
+        this.prioridade = tarefa.getPrioridade();
     }
 }

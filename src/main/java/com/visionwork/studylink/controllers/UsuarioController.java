@@ -18,11 +18,6 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @PostMapping(value = "/usuarios")
-    public ResponseEntity<Usuario> iserirUsuario(@RequestBody Usuario usuario) {
-        Usuario salvarUsuario = usuarioService.salvarUsuario(usuario);
-        return ResponseEntity.ok(salvarUsuario);
-    }
 
 
     @GetMapping("/usuarios/{id}")
@@ -31,11 +26,7 @@ public class UsuarioController {
         return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping(value = "/tarefas")
-    public ResponseEntity<Tarefa> iserirUsuario(@RequestBody Tarefa tarefa) {
-        Tarefa salvarTarefa = usuarioService.salvarTarefa(tarefa);
-        return ResponseEntity.ok(salvarTarefa);
-    }
+
 
 
 }

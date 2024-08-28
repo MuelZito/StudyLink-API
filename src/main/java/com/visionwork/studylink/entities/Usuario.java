@@ -14,7 +14,7 @@ public class Usuario {
     private String nome_usuario;
     private String email;
     private String senha;
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     @JsonManagedReference
     List<Tarefa> tarefas;
 
