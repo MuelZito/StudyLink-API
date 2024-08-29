@@ -1,6 +1,7 @@
 package com.visionwork.studylink.controllers;
 
 
+import com.visionwork.studylink.dto.TarefaDTO;
 import com.visionwork.studylink.entities.Tarefa;
 import com.visionwork.studylink.repositories.TarefasRepository;
 import com.visionwork.studylink.services.TarefaService;
@@ -18,21 +19,21 @@ public class TarefasController {
     TarefaService tarefaService;
 
     @PostMapping(value = "/tarefas")
-    public ResponseEntity<Tarefa> inserirTarefa(@RequestBody Tarefa tarefa) {
-        Tarefa salvarTarefa = tarefaService.salvarTarefa(tarefa);
+    public ResponseEntity<TarefaDTO> inserirTarefa(@RequestBody Tarefa tarefa) {
+        TarefaDTO salvarTarefa = tarefaService.salvarTarefa(tarefa);
         return ResponseEntity.ok(salvarTarefa);
     }
 
     @DeleteMapping("/tarefas/{id}")
     public ResponseEntity<String> deletarTarefa(@PathVariable Long id) {
         tarefaService.deletarById(id);
-        return ResponseEntity.ok("Tarefa deletada com sucesso."); // Mensagem de sucesso
+        return ResponseEntity.ok("Tarefa deletada com sucesso.");
     }
 
     @PutMapping(value = "/tarefas")
-    public ResponseEntity<Tarefa> alterarTarefa(@RequestBody Tarefa tarefa){
-        Tarefa tarefaNova = tarefaService.alterarTarefa(tarefa);
-        return ResponseEntity.ok(tarefaNova);
+    public ResponseEntity<TarefaDTO> alterarTarefa(@RequestBody Tarefa tarefa){
+        TarefaDTO tarefaAtualizada = tarefaService.alterarTarefa(tarefa);
+        return ResponseEntity.ok(tarefaAtualizada);
     }
 
 }
