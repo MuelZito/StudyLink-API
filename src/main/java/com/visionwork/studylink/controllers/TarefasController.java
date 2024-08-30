@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -33,6 +34,12 @@ public class TarefasController {
     public ResponseEntity<TarefaDTO> alterarTarefa(@RequestBody Tarefa tarefa){
         TarefaDTO tarefaAtualizada = tarefaService.alterarTarefa(tarefa);
         return ResponseEntity.ok(tarefaAtualizada);
+    }
+
+    @GetMapping(value = "/tarefas/{dataInicio}/{dataFim}")
+    public ResponseEntity<List<TarefaDTO>> buscarTarefas(@PathVariable("dataInicio") LocalDate dataInicio,@PathVariable("dataFim") LocalDate dataFim){
+        List<TarefaDTO> tarefas = tarefaService.buscarTarefas(dataInicio,dataFim);
+        return ResponseEntity.ok(tarefas);
     }
 
 }

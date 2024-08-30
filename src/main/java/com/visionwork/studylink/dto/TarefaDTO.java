@@ -6,23 +6,23 @@ import java.time.LocalDate;
 
 public class TarefaDTO {
     private String titulo;
-    private LocalDate data_fim;
+    private LocalDate dataFim;
     private boolean concluida;
     private int prioridade;
 
     public TarefaDTO() {
     }
 
-    public TarefaDTO(String titulo, LocalDate data_fim, boolean concluida, int prioridade) {
+    public TarefaDTO(String titulo, LocalDate dataFim, boolean concluida, int prioridade) {
         this.titulo = titulo;
-        this.data_fim = data_fim;
+        this.dataFim = dataFim;
         this.concluida = concluida;
         this.prioridade = prioridade;
     }
 
     public TarefaDTO(Tarefa tarefa) {
         titulo = tarefa.getTitulo();
-        data_fim = tarefa.getData_fim();
+        dataFim = tarefa.getDataFim();
         concluida = tarefa.isConcluida();
         prioridade = tarefa.getPrioridade();
     }
@@ -35,12 +35,12 @@ public class TarefaDTO {
         this.titulo = titulo;
     }
 
-    public LocalDate getData_fim() {
-        return data_fim;
+    public LocalDate getDataFim() {
+        return dataFim;
     }
 
-    public void setData_fim(LocalDate data_fim) {
-        this.data_fim = data_fim;
+    public void setDataFim(LocalDate dataFim) {
+        this.dataFim = dataFim;
     }
 
     public boolean isConcluida() {

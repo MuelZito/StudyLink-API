@@ -12,8 +12,8 @@ public class Tarefa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titulo;
-    private LocalDate data_inicio;
-    private LocalDate data_fim;
+    private LocalDate dataInicio;
+    private LocalDate dataFim;
     private boolean concluida;
     private int prioridade;
     @ManyToOne
@@ -23,11 +23,11 @@ public class Tarefa {
     public Tarefa() {
     }
 
-    public Tarefa(Long id, String titulo, LocalDate data_inicio, LocalDate data_fim, boolean concluida, int prioridade, Usuario usuario) {
+    public Tarefa(Long id, String titulo, LocalDate dataInicio, LocalDate dataFim, boolean concluida, int prioridade, Usuario usuario) {
         this.id = id;
         this.titulo = titulo;
-        this.data_inicio = data_inicio;
-        this.data_fim = data_fim;
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
         this.concluida = concluida;
         this.prioridade = prioridade;
         this.usuario = usuario;
@@ -49,20 +49,20 @@ public class Tarefa {
         this.titulo = titulo;
     }
 
-    public LocalDate getData_inicio() {
-        return data_inicio;
+    public LocalDate getDataInicio() {
+        return dataInicio;
     }
 
-    public void setData_inicio(LocalDate data_inicio) {
-        this.data_inicio = data_inicio;
+    public void setDataInicio(LocalDate dataInicio) {
+        this.dataInicio = dataInicio;
     }
 
-    public LocalDate getData_fim() {
-        return data_fim;
+    public LocalDate getDataFim() {
+        return dataFim;
     }
 
-    public void setData_fim(LocalDate data_fim) {
-        this.data_fim = data_fim;
+    public void setDataFim(LocalDate dataFim) {
+        this.dataFim = dataFim;
     }
 
     public boolean isConcluida() {
@@ -91,8 +91,8 @@ public class Tarefa {
 
     public void update(Tarefa tarefa) {
         this.titulo = tarefa.getTitulo();
-        this.data_inicio = tarefa.getData_inicio();
-        this.data_fim = tarefa.getData_fim();
+        this.dataInicio = tarefa.getDataInicio();
+        this.dataFim = tarefa.getDataFim();
         this.concluida = tarefa.isConcluida();
         this.prioridade = tarefa.getPrioridade();
     }

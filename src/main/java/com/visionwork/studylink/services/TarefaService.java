@@ -9,9 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TarefaService {
@@ -40,5 +44,12 @@ public class TarefaService {
         tarefaAtualizada.update(tarefa);
         return new TarefaDTO(tarefaAtualizada);
     }
+
+    @Transactional
+    public List<TarefaDTO> buscarTarefas(LocalDate dataInicio, LocalDate dataFim) {
+        List<Tarefa> tarefas = tarefasRepository.findByDataFimBetween(dataInicio, dataFim);
+        return tarefas.stream().map(tarefa -> new TarefaDTO(tarefa)).collect(Collectors.toList());
+    }
+
 
 }
