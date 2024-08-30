@@ -26,4 +26,36 @@ public class TarefaDTO {
         concluida = tarefa.isConcluida();
         prioridade = tarefa.getPrioridade();
     }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public LocalDate getData_fim() {
+        return data_fim;
+    }
+
+    public void setData_fim(LocalDate data_fim) {
+        this.data_fim = data_fim;
+    }
+
+    public boolean isConcluida() {
+        return concluida;
+    }
+
+    public void setConcluida(boolean concluida) {
+        this.concluida = concluida;
+    }
+
+    public int getPrioridade() {
+        return prioridade;
+    }
+
+    public void setPrioridade(int prioridade) {
+        this.prioridade = prioridade;
+    }
 }

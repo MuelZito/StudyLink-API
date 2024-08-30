@@ -21,9 +21,8 @@ public class TarefaService {
 
     @Transactional
     public TarefaDTO salvarTarefa(Tarefa tarefa) {
-        Tarefa tarefa1 = tarefasRepository.save(tarefa);
-        TarefaDTO dto = new TarefaDTO(tarefa1);
-        return dto;
+        Tarefa salvarTarefa = tarefasRepository.save(tarefa);
+        return new TarefaDTO(salvarTarefa);
     }
 
     @Transactional

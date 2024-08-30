@@ -23,6 +23,16 @@ public class Tarefa {
     public Tarefa() {
     }
 
+    public Tarefa(Long id, String titulo, LocalDate data_inicio, LocalDate data_fim, boolean concluida, int prioridade, Usuario usuario) {
+        this.id = id;
+        this.titulo = titulo;
+        this.data_inicio = data_inicio;
+        this.data_fim = data_fim;
+        this.concluida = concluida;
+        this.prioridade = prioridade;
+        this.usuario = usuario;
+    }
+
     public Long getId() {
         return id;
     }

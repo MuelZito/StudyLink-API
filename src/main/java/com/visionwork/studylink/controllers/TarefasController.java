@@ -3,7 +3,6 @@ package com.visionwork.studylink.controllers;
 
 import com.visionwork.studylink.dto.TarefaDTO;
 import com.visionwork.studylink.entities.Tarefa;
-import com.visionwork.studylink.repositories.TarefasRepository;
 import com.visionwork.studylink.services.TarefaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
