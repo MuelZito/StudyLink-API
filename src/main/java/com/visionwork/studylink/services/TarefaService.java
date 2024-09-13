@@ -1,20 +1,19 @@
 package com.visionwork.studylink.services;
 
 
-import com.visionwork.studylink.dto.TarefaDTO;
+import com.visionwork.studylink.dto.tarefa.insert.TarefaCreateDTO;
+import com.visionwork.studylink.dto.tarefa.read.TarefaReadDTO;
 import com.visionwork.studylink.entities.Tarefa;
+import com.visionwork.studylink.entities.Usuario;
 import com.visionwork.studylink.repositories.TarefasRepository;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,31 +23,55 @@ public class TarefaService {
     TarefasRepository tarefasRepository;
 
     @Transactional
-    public TarefaDTO salvarTarefa(Tarefa tarefa) {
-        Tarefa salvarTarefa = tarefasRepository.save(tarefa);
-        return new TarefaDTO(salvarTarefa);
+    public TarefaReadDTO criarTarefa(TarefaCreateDTO tarefaCreateDTO) {
+        Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Tarefa tarefa = new Tarefa();
+        tarefa.setTitulo(tarefaCreateDTO.titulo());
+        tarefa.setDescricao(tarefaCreateDTO.descricao());
+        tarefa.setDataInicio(tarefaCreateDTO.dataInicio());
+        tarefa.setDataFim(tarefaCreateDTO.dataFim());
+        tarefa.setPrioridade(tarefaCreateDTO.prioridade());
+        tarefa.setUsuario(principal);
+
+        tarefa = tarefasRepository.save(tarefa);
+        return new TarefaReadDTO(tarefa);
     }
 
     @Transactional
     public void deletarById(Long id) {
-        if (tarefasRepository.existsById(id)) {
-            tarefasRepository.deleteById(id);
-        } else {
-            throw new IllegalArgumentException("Tarefa com o  ID " + id + " não foi possivel deletar");
-        }
+        Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Tarefa tarefa = tarefasRepository.findByIdAndUsuario(id, principal).
+                orElseThrow(() -> new AccessDeniedException("Você não tem permissão pra deletar essa tarefa"));
+        tarefasRepository.delete(tarefa);
     }
 
     @Transactional
-    public TarefaDTO alterarTarefa(Tarefa tarefa) {
-        Tarefa tarefaAtualizada = tarefasRepository.findById(tarefa.getId()).orElseThrow(() -> new IllegalArgumentException("ID não existe"));
-        tarefaAtualizada.update(tarefa);
-        return new TarefaDTO(tarefaAtualizada);
+    public TarefaReadDTO alterarTarefa(Long id,TarefaCreateDTO tarefaCreateDTO) {
+        // Obtém o usuário autenticado
+        Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // Busca a tarefa pelo ID e pelo usuário autenticado
+        Tarefa tarefa = tarefasRepository.findByIdAndUsuario(id, principal)
+                .orElseThrow(() -> new AccessDeniedException("Você não tem permissão para atualizar esta tarefa."));
+
+        tarefa.setTitulo(tarefaCreateDTO.titulo());
+        tarefa.setDescricao(tarefaCreateDTO.descricao());
+        tarefa.setDataInicio(tarefaCreateDTO.dataInicio());
+        tarefa.setDataFim(tarefaCreateDTO.dataFim());
+        tarefa.setPrioridade(tarefaCreateDTO.prioridade());
+
+        tarefa = tarefasRepository.save(tarefa);
+
+        return new TarefaReadDTO(tarefa);
     }
 
     @Transactional
-    public List<TarefaDTO> buscarTarefas(LocalDate dataInicio, LocalDate dataFim) {
-        List<Tarefa> tarefas = tarefasRepository.findByDataFimBetween(dataInicio, dataFim);
-        return tarefas.stream().map(tarefa -> new TarefaDTO(tarefa)).collect(Collectors.toList());
+    public List<TarefaReadDTO> buscarTarefas(LocalDate dataInicio, LocalDate dataFim) {
+        Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        List<Tarefa> tarefas = tarefasRepository.findByUsuarioAndDataFimBetween(principal, dataInicio, dataFim);
+        return tarefas.stream().map(tarefa -> new TarefaReadDTO(tarefa)).collect(Collectors.toList());
     }
 
 

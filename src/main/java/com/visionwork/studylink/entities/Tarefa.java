@@ -12,6 +12,7 @@ public class Tarefa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titulo;
+    private String descricao;
     private LocalDate dataInicio;
     private LocalDate dataFim;
     private boolean concluida;
@@ -23,9 +24,10 @@ public class Tarefa {
     public Tarefa() {
     }
 
-    public Tarefa(Long id, String titulo, LocalDate dataInicio, LocalDate dataFim, boolean concluida, int prioridade, Usuario usuario) {
+    public Tarefa(Long id, String titulo, String descricao,LocalDate dataInicio, LocalDate dataFim, boolean concluida, int prioridade, Usuario usuario) {
         this.id = id;
         this.titulo = titulo;
+        this.descricao = descricao;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
         this.concluida = concluida;
@@ -43,6 +45,14 @@ public class Tarefa {
 
     public String getTitulo() {
         return titulo;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public void setTitulo(String titulo) {
@@ -88,6 +98,7 @@ public class Tarefa {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
 
     public void update(Tarefa tarefa) {
         this.titulo = tarefa.getTitulo();

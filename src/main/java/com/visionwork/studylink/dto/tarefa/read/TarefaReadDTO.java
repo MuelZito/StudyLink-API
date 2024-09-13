@@ -1,30 +1,41 @@
-package com.visionwork.studylink.dto;
+package com.visionwork.studylink.dto.tarefa.read;
 
 import com.visionwork.studylink.entities.Tarefa;
 
 import java.time.LocalDate;
 
-public class TarefaDTO {
+public class TarefaReadDTO {
+    private Long id;
     private String titulo;
     private LocalDate dataFim;
     private boolean concluida;
     private int prioridade;
 
-    public TarefaDTO() {
+    public TarefaReadDTO() {
     }
 
-    public TarefaDTO(String titulo, LocalDate dataFim, boolean concluida, int prioridade) {
+    public TarefaReadDTO(Long id, String titulo, LocalDate dataFim, boolean concluida, int prioridade) {
+        this.id = id;
         this.titulo = titulo;
         this.dataFim = dataFim;
         this.concluida = concluida;
         this.prioridade = prioridade;
     }
 
-    public TarefaDTO(Tarefa tarefa) {
+    public TarefaReadDTO(Tarefa tarefa) {
+        id = tarefa.getId();
         titulo = tarefa.getTitulo();
         dataFim = tarefa.getDataFim();
         concluida = tarefa.isConcluida();
         prioridade = tarefa.getPrioridade();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitulo() {

@@ -1,7 +1,8 @@
 package com.visionwork.studylink.controllers;
 
 
-import com.visionwork.studylink.dto.TarefaDTO;
+import com.visionwork.studylink.dto.tarefa.insert.TarefaCreateDTO;
+import com.visionwork.studylink.dto.tarefa.read.TarefaReadDTO;
 import com.visionwork.studylink.entities.Tarefa;
 import com.visionwork.studylink.services.TarefaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,9 @@ public class TarefasController {
     TarefaService tarefaService;
 
     @PostMapping(value = "/tarefas")
-    public ResponseEntity<TarefaDTO> inserirTarefa(@RequestBody Tarefa tarefa) {
-        TarefaDTO salvarTarefa = tarefaService.salvarTarefa(tarefa);
-        return ResponseEntity.ok(salvarTarefa);
+    public ResponseEntity<TarefaReadDTO> inserirTarefa(@RequestBody TarefaCreateDTO tarefa) {
+        TarefaReadDTO criarTarefa = tarefaService.criarTarefa(tarefa);
+        return ResponseEntity.ok(criarTarefa);
     }
 
     @DeleteMapping("/tarefas/{id}")
@@ -30,15 +31,15 @@ public class TarefasController {
         return ResponseEntity.ok("Tarefa deletada com sucesso.");
     }
 
-    @PutMapping(value = "/tarefas")
-    public ResponseEntity<TarefaDTO> alterarTarefa(@RequestBody Tarefa tarefa){
-        TarefaDTO tarefaAtualizada = tarefaService.alterarTarefa(tarefa);
+    @PutMapping(value = "/tarefas/{id}")
+    public ResponseEntity<TarefaReadDTO> alterarTarefa(@PathVariable Long id,@RequestBody TarefaCreateDTO tarefa){
+        TarefaReadDTO tarefaAtualizada = tarefaService.alterarTarefa(id, tarefa);
         return ResponseEntity.ok(tarefaAtualizada);
     }
 
     @GetMapping(value = "/tarefas/{dataInicio}/{dataFim}")
-    public ResponseEntity<List<TarefaDTO>> buscarTarefas(@PathVariable("dataInicio") LocalDate dataInicio,@PathVariable("dataFim") LocalDate dataFim){
-        List<TarefaDTO> tarefas = tarefaService.buscarTarefas(dataInicio,dataFim);
+    public ResponseEntity<List<TarefaReadDTO>> buscarTarefas(@PathVariable("dataInicio") LocalDate dataInicio, @PathVariable("dataFim") LocalDate dataFim){
+        List<TarefaReadDTO> tarefas = tarefaService.buscarTarefas(dataInicio,dataFim);
         return ResponseEntity.ok(tarefas);
     }
 
