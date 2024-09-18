@@ -66,7 +66,7 @@ public class TarefaService {
         return new TarefaReadDTO(tarefa);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<TarefaReadDTO> buscarTarefas(LocalDate dataInicio, LocalDate dataFim) {
         Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
