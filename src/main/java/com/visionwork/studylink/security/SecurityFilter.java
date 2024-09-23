@@ -1,6 +1,5 @@
 package com.visionwork.studylink.security;
 
-import ch.qos.logback.core.rolling.helper.TimeBasedArchiveRemover;
 import com.visionwork.studylink.entities.Usuario;
 import com.visionwork.studylink.repositories.UsuarioRepository;
 import jakarta.servlet.FilterChain;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
 
 @Component
@@ -25,26 +23,24 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
     UsuarioRepository usuarioRepository;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // Verifica se o método é POST
-        if ("POST".equalsIgnoreCase(request.getMethod())) {
-            var token = this.recoverToken(request);
-            var login = tokenService.validacaoToken(token);
+        var token = this.recoverToken(request);
+        var login = tokenService.validacaoToken(token);
 
-            if (login != null) {
-                Usuario usuario = usuarioRepository.findByEmail(login).orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
-                var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-                var authentication = new UsernamePasswordAuthenticationToken(usuario, null, authorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+        if (login != null) {
+            Usuario usuario = usuarioRepository.findByEmail(login).orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
+            var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+            var authentication = new UsernamePasswordAuthenticationToken(usuario, null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
+        // Segue para o próximo filtro na cadeia
         filterChain.doFilter(request, response);
     }
 
-
-
-    private String recoverToken(HttpServletRequest request){
+    private String recoverToken(HttpServletRequest request) {
         var authHeader = request.getHeader("Authorization");
         if (authHeader == null) return null;
         return authHeader.replace("Bearer ", "");
