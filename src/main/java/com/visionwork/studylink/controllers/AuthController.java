@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -26,15 +26,20 @@ public class AuthController {
         this.tokenService = tokenService;
     }
 
+    // Método para login utilizando POST
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid UserLoginDTO userLoginDTO) {
-        Usuario usuario = this.repository.findByEmail(userLoginDTO.email()).orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
-        if (passwordEncoder.matches(userLoginDTO.senha(),usuario.getSenha())) {
+        Usuario usuario = this.repository.findByEmail(userLoginDTO.email())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (passwordEncoder.matches(userLoginDTO.senha(), usuario.getSenha())) {
             String token = this.tokenService.geracaoToke(usuario);
             return ResponseEntity.ok(new ReponseDTO(usuario.getNome_usuario(), token));
         }
+
         return ResponseEntity.badRequest().build();
     }
+
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody UserRegisterDTO userRegisterDTO) {
