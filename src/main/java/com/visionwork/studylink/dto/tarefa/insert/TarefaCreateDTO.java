@@ -1,5 +1,7 @@
 package com.visionwork.studylink.dto.tarefa.insert;
 
+import com.visionwork.studylink.entities.PrioridadeType;
+
 import java.time.LocalDate;
 
 public record TarefaCreateDTO(
@@ -7,6 +9,6 @@ public record TarefaCreateDTO(
         String descricao,
         LocalDate dataInicio,
         LocalDate dataFim,
-        Integer prioridade
+        PrioridadeType prioridade
 ) {
 }

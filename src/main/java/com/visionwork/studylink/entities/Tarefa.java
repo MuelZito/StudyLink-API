@@ -15,8 +15,10 @@ public class Tarefa {
     private String descricao;
     private LocalDate dataInicio;
     private LocalDate dataFim;
-    private boolean concluida;
-    private int prioridade;
+    @Enumerated(EnumType.STRING)
+    private StatusType status;
+    @Enumerated(EnumType.STRING)
+    private PrioridadeType prioridade;
     @ManyToOne
     @JsonBackReference
     private Usuario usuario;
@@ -24,15 +26,32 @@ public class Tarefa {
     public Tarefa() {
     }
 
-    public Tarefa(Long id, String titulo, String descricao,LocalDate dataInicio, LocalDate dataFim, boolean concluida, int prioridade, Usuario usuario) {
+    public Tarefa(Long id, String titulo, String descricao, LocalDate dataInicio, LocalDate dataFim,
+                  StatusType status, PrioridadeType prioridade, Usuario usuario) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
-        this.concluida = concluida;
+        this.status = status;
         this.prioridade = prioridade;
         this.usuario = usuario;
+    }
+
+    public StatusType getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusType status) {
+        this.status = status;
+    }
+
+    public PrioridadeType getPrioridade() {
+        return prioridade;
+    }
+
+    public void setPrioridade(PrioridadeType prioridade) {
+        this.prioridade = prioridade;
     }
 
     public Long getId() {
@@ -75,22 +94,6 @@ public class Tarefa {
         this.dataFim = dataFim;
     }
 
-    public boolean isConcluida() {
-        return concluida;
-    }
-
-    public void setConcluida(boolean concluida) {
-        this.concluida = concluida;
-    }
-
-    public int getPrioridade() {
-        return prioridade;
-    }
-
-    public void setPrioridade(int prioridade) {
-        this.prioridade = prioridade;
-    }
-
     public Usuario getUsuario() {
         return usuario;
     }
@@ -104,7 +107,7 @@ public class Tarefa {
         this.titulo = tarefa.getTitulo();
         this.dataInicio = tarefa.getDataInicio();
         this.dataFim = tarefa.getDataFim();
-        this.concluida = tarefa.isConcluida();
+        this.status = tarefa.getStatus();
         this.prioridade = tarefa.getPrioridade();
     }
 }
