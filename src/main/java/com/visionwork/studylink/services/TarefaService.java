@@ -2,6 +2,7 @@ package com.visionwork.studylink.services;
 
 
 import com.visionwork.studylink.dto.tarefa.insert.TarefaCreateDTO;
+import com.visionwork.studylink.dto.tarefa.insert.TarefaUpdateDTO;
 import com.visionwork.studylink.dto.tarefa.read.TarefaReadDTO;
 import com.visionwork.studylink.entities.Tarefa;
 import com.visionwork.studylink.entities.Usuario;
@@ -25,15 +26,14 @@ public class TarefaService {
     @Transactional
     public TarefaReadDTO criarTarefa(TarefaCreateDTO tarefaCreateDTO) {
         Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        Tarefa tarefa = new Tarefa();
-        tarefa.setTitulo(tarefaCreateDTO.titulo());
-        tarefa.setDescricao(tarefaCreateDTO.descricao());
-        tarefa.setDataInicio(tarefaCreateDTO.dataInicio());
-        tarefa.setDataFim(tarefaCreateDTO.dataFim());
-        tarefa.setPrioridade(tarefaCreateDTO.prioridade());
-        tarefa.setUsuario(principal);
-
+        Tarefa tarefa = new Tarefa.Builder()
+                .titulo(tarefaCreateDTO.titulo())
+                .descricao(tarefaCreateDTO.descricao())
+                .dataInicio(tarefaCreateDTO.dataInicio())
+                .dataFim(tarefaCreateDTO.dataFim())
+                .prioridade(tarefaCreateDTO.prioridade())
+                .usuario(principal)
+                .build();
         tarefa = tarefasRepository.save(tarefa);
         return new TarefaReadDTO(tarefa);
     }
@@ -47,7 +47,7 @@ public class TarefaService {
     }
 
     @Transactional
-    public TarefaReadDTO alterarTarefa(Long id,TarefaCreateDTO tarefaCreateDTO) {
+    public TarefaReadDTO alterarTarefa(Long id, TarefaUpdateDTO tarefaUpdateDTO) {
         // Obtém o usuário autenticado
         Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -55,13 +55,16 @@ public class TarefaService {
         Tarefa tarefa = tarefasRepository.findByIdAndUsuario(id, principal)
                 .orElseThrow(() -> new AccessDeniedException("Você não tem permissão para atualizar esta tarefa."));
 
-        tarefa.setTitulo(tarefaCreateDTO.titulo());
-        tarefa.setDescricao(tarefaCreateDTO.descricao());
-        tarefa.setDataInicio(tarefaCreateDTO.dataInicio());
-        tarefa.setDataFim(tarefaCreateDTO.dataFim());
-        tarefa.setPrioridade(tarefaCreateDTO.prioridade());
+        // Atualiza os campos da tarefa existente
+        tarefa.setTitulo(tarefaUpdateDTO.titulo());
+        tarefa.setDescricao(tarefaUpdateDTO.descricao());
+        tarefa.setDataInicio(tarefaUpdateDTO.dataInicio());
+        tarefa.setDataFim(tarefaUpdateDTO.dataFim());
+        tarefa.setPrioridade(tarefaUpdateDTO.prioridade());
+        tarefa.setStatus(tarefaUpdateDTO.status());
 
-        tarefa = tarefasRepository.save(tarefa);
+        // Salva a tarefa atualizada no banco de dados
+        tarefa = tarefasRepository.save(tarefa); // O save aqui é opcional se você estiver usando @Transactional
 
         return new TarefaReadDTO(tarefa);
     }

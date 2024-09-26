@@ -2,6 +2,7 @@ package com.visionwork.studylink.controllers;
 
 
 import com.visionwork.studylink.dto.tarefa.insert.TarefaCreateDTO;
+import com.visionwork.studylink.dto.tarefa.insert.TarefaUpdateDTO;
 import com.visionwork.studylink.dto.tarefa.read.TarefaReadDTO;
 import com.visionwork.studylink.entities.Tarefa;
 import com.visionwork.studylink.services.TarefaService;
@@ -32,7 +33,7 @@ public class TarefasController {
     }
 
     @PutMapping(value = "/tarefas/{id}")
-    public ResponseEntity<TarefaReadDTO> alterarTarefa(@PathVariable Long id,@RequestBody TarefaCreateDTO tarefa){
+    public ResponseEntity<TarefaReadDTO> alterarTarefa(@PathVariable Long id,@RequestBody TarefaUpdateDTO tarefa){
         TarefaReadDTO tarefaAtualizada = tarefaService.alterarTarefa(id, tarefa);
         return ResponseEntity.ok(tarefaAtualizada);
     }

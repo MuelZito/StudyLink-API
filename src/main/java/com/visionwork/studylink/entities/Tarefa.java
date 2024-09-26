@@ -38,21 +38,6 @@ public class Tarefa {
         this.usuario = usuario;
     }
 
-    public StatusType getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusType status) {
-        this.status = status;
-    }
-
-    public PrioridadeType getPrioridade() {
-        return prioridade;
-    }
-
-    public void setPrioridade(PrioridadeType prioridade) {
-        this.prioridade = prioridade;
-    }
 
     public Long getId() {
         return id;
@@ -66,16 +51,16 @@ public class Tarefa {
         return titulo;
     }
 
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
     public String getDescricao() {
         return descricao;
     }
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
     }
 
     public LocalDate getDataInicio() {
@@ -94,6 +79,22 @@ public class Tarefa {
         this.dataFim = dataFim;
     }
 
+    public StatusType getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusType status) {
+        this.status = status;
+    }
+
+    public PrioridadeType getPrioridade() {
+        return prioridade;
+    }
+
+    public void setPrioridade(PrioridadeType prioridade) {
+        this.prioridade = prioridade;
+    }
+
     public Usuario getUsuario() {
         return usuario;
     }
@@ -102,12 +103,64 @@ public class Tarefa {
         this.usuario = usuario;
     }
 
+    public void update(Tarefa tarefaAtualizada) {
+        this.titulo = tarefaAtualizada.getTitulo();
+        this.descricao = tarefaAtualizada.getDescricao();
+        this.dataInicio = tarefaAtualizada.getDataInicio();
+        this.dataFim = tarefaAtualizada.getDataFim();
+        this.status = tarefaAtualizada.getStatus();
+        this.prioridade = tarefaAtualizada.getPrioridade();
+    }
 
-    public void update(Tarefa tarefa) {
-        this.titulo = tarefa.getTitulo();
-        this.dataInicio = tarefa.getDataInicio();
-        this.dataFim = tarefa.getDataFim();
-        this.status = tarefa.getStatus();
-        this.prioridade = tarefa.getPrioridade();
+    public static final class Builder {
+        private String titulo;
+        private String descricao;
+        private LocalDate dataInicio;
+        private LocalDate dataFim;
+        private StatusType status = StatusType.PENDENTE;
+        private PrioridadeType prioridade;
+        private Usuario usuario;
+
+        public Builder() {
+        }
+
+        public Builder titulo(String titulo) {
+            this.titulo = titulo;
+            return this;
+        }
+
+        public Builder descricao(String descricao) {
+            this.descricao = descricao;
+            return this;
+        }
+
+        public Builder dataInicio(LocalDate dataInicio) {
+            this.dataInicio = dataInicio;
+            return this;
+        }
+
+        public Builder dataFim(LocalDate dataFim) {
+            this.dataFim = dataFim;
+            return this;
+        }
+
+        public Builder status(StatusType status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder prioridade(PrioridadeType prioridade) {
+            this.prioridade = prioridade;
+            return this;
+        }
+
+        public Builder usuario(Usuario usuario) {
+            this.usuario = usuario;
+            return this;
+        }
+
+        public Tarefa build() {
+            return new Tarefa(null, titulo, descricao, dataInicio, dataFim, status, prioridade, usuario);
+        }
     }
 }

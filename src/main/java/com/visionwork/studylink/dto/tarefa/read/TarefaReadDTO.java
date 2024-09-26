@@ -1,5 +1,7 @@
 package com.visionwork.studylink.dto.tarefa.read;
 
+import com.visionwork.studylink.entities.PrioridadeType;
+import com.visionwork.studylink.entities.StatusType;
 import com.visionwork.studylink.entities.Tarefa;
 
 import java.time.LocalDate;
@@ -7,26 +9,29 @@ import java.time.LocalDate;
 public class TarefaReadDTO {
     private Long id;
     private String titulo;
+    private String descricao;
     private LocalDate dataFim;
-    private boolean concluida;
-    private int prioridade;
+    private StatusType status;
+    private PrioridadeType prioridade;
 
     public TarefaReadDTO() {
     }
 
-    public TarefaReadDTO(Long id, String titulo, LocalDate dataFim, boolean concluida, int prioridade) {
+    public TarefaReadDTO(Long id, String titulo, String descricao, LocalDate dataFim, StatusType status, PrioridadeType prioridade) {
         this.id = id;
         this.titulo = titulo;
+        this.descricao = descricao;
         this.dataFim = dataFim;
-        this.concluida = concluida;
+        this.status = status;
         this.prioridade = prioridade;
     }
 
     public TarefaReadDTO(Tarefa tarefa) {
         id = tarefa.getId();
         titulo = tarefa.getTitulo();
+        descricao = tarefa.getDescricao();
         dataFim = tarefa.getDataFim();
-        concluida = tarefa.isConcluida();
+        status = tarefa.getStatus();
         prioridade = tarefa.getPrioridade();
     }
 
@@ -34,39 +39,24 @@ public class TarefaReadDTO {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getTitulo() {
         return titulo;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public String getDescricao() {
+        return descricao;
     }
-
     public LocalDate getDataFim() {
         return dataFim;
     }
 
-    public void setDataFim(LocalDate dataFim) {
-        this.dataFim = dataFim;
+    public StatusType getStatus() {
+        return status;
     }
 
-    public boolean isConcluida() {
-        return concluida;
-    }
 
-    public void setConcluida(boolean concluida) {
-        this.concluida = concluida;
-    }
-
-    public int getPrioridade() {
+    public PrioridadeType getPrioridade() {
         return prioridade;
     }
 
-    public void setPrioridade(int prioridade) {
-        this.prioridade = prioridade;
-    }
 }
