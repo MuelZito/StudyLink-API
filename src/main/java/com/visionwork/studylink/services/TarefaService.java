@@ -48,24 +48,11 @@ public class TarefaService {
 
     @Transactional
     public TarefaReadDTO alterarTarefa(Long id, TarefaUpdateDTO tarefaUpdateDTO) {
-        // Obtém o usuário autenticado
         Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        // Busca a tarefa pelo ID e pelo usuário autenticado
         Tarefa tarefa = tarefasRepository.findByIdAndUsuario(id, principal)
                 .orElseThrow(() -> new AccessDeniedException("Você não tem permissão para atualizar esta tarefa."));
-
-        // Atualiza os campos da tarefa existente
-        tarefa.setTitulo(tarefaUpdateDTO.titulo());
-        tarefa.setDescricao(tarefaUpdateDTO.descricao());
-        tarefa.setDataInicio(tarefaUpdateDTO.dataInicio());
-        tarefa.setDataFim(tarefaUpdateDTO.dataFim());
-        tarefa.setPrioridade(tarefaUpdateDTO.prioridade());
-        tarefa.setStatus(tarefaUpdateDTO.status());
-
-        // Salva a tarefa atualizada no banco de dados
-        tarefa = tarefasRepository.save(tarefa); // O save aqui é opcional se você estiver usando @Transactional
-
+        tarefa.update(tarefaUpdateDTO);
         return new TarefaReadDTO(tarefa);
     }
 

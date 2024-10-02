@@ -1,6 +1,7 @@
 package com.visionwork.studylink.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.visionwork.studylink.dto.tarefa.insert.TarefaUpdateDTO;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -43,73 +44,41 @@ public class Tarefa {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getTitulo() {
         return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
     }
 
     public String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
     public LocalDate getDataInicio() {
         return dataInicio;
-    }
-
-    public void setDataInicio(LocalDate dataInicio) {
-        this.dataInicio = dataInicio;
     }
 
     public LocalDate getDataFim() {
         return dataFim;
     }
 
-    public void setDataFim(LocalDate dataFim) {
-        this.dataFim = dataFim;
-    }
-
     public StatusType getStatus() {
         return status;
-    }
-
-    public void setStatus(StatusType status) {
-        this.status = status;
     }
 
     public PrioridadeType getPrioridade() {
         return prioridade;
     }
 
-    public void setPrioridade(PrioridadeType prioridade) {
-        this.prioridade = prioridade;
-    }
-
     public Usuario getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public void update(Tarefa tarefaAtualizada) {
-        this.titulo = tarefaAtualizada.getTitulo();
-        this.descricao = tarefaAtualizada.getDescricao();
-        this.dataInicio = tarefaAtualizada.getDataInicio();
-        this.dataFim = tarefaAtualizada.getDataFim();
-        this.status = tarefaAtualizada.getStatus();
-        this.prioridade = tarefaAtualizada.getPrioridade();
+    public void update(TarefaUpdateDTO tarefaAtualizada) {
+        this.titulo = tarefaAtualizada.titulo();
+        this.descricao = tarefaAtualizada.descricao();
+        this.dataInicio = tarefaAtualizada.dataInicio();
+        this.dataFim = tarefaAtualizada.dataFim();
+        this.status = tarefaAtualizada.status();
+        this.prioridade = tarefaAtualizada.prioridade();
     }
 
     public static final class Builder {
