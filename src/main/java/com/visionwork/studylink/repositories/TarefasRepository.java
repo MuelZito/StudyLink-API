@@ -1,7 +1,7 @@
 package com.visionwork.studylink.repositories;
 
-import com.visionwork.studylink.entities.Tarefa;
-import com.visionwork.studylink.entities.Usuario;
+import com.visionwork.studylink.models.tarefa.Tarefa;
+import com.visionwork.studylink.models.usuario.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;

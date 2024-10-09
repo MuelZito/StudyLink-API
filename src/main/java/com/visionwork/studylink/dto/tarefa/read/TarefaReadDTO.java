@@ -1,8 +1,8 @@
 package com.visionwork.studylink.dto.tarefa.read;
 
-import com.visionwork.studylink.entities.PrioridadeType;
-import com.visionwork.studylink.entities.StatusType;
-import com.visionwork.studylink.entities.Tarefa;
+import com.visionwork.studylink.models.tarefa.PrioridadeType;
+import com.visionwork.studylink.models.tarefa.StatusType;
+import com.visionwork.studylink.models.tarefa.Tarefa;
 
 import java.time.LocalDate;
 

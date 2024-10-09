@@ -1,6 +1,6 @@
 package com.visionwork.studylink.security;
 
-import com.visionwork.studylink.entities.Usuario;
+import com.visionwork.studylink.models.usuario.Usuario;
 import com.visionwork.studylink.repositories.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

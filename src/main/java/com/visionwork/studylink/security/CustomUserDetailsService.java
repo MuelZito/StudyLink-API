@@ -1,6 +1,6 @@
 package com.visionwork.studylink.security;
 
-import com.visionwork.studylink.entities.Usuario;
+import com.visionwork.studylink.models.usuario.Usuario;
 import com.visionwork.studylink.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

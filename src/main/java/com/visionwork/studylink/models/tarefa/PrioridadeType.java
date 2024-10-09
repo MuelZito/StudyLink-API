@@ -1,4 +1,4 @@
-package com.visionwork.studylink.entities;
+package com.visionwork.studylink.models.tarefa;
 
 public enum PrioridadeType {
     BAIXA,

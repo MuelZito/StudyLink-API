@@ -1,6 +1,8 @@
-package com.visionwork.studylink.entities;
+package com.visionwork.studylink.models.usuario;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.visionwork.studylink.models.material.Material;
+import com.visionwork.studylink.models.tarefa.Tarefa;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -11,12 +13,16 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nome_usuario;
+    private String nomeUsuario;
     private String email;
     private String senha;
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     @JsonManagedReference
     List<Tarefa> tarefas;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    List<Material> materiais;
+
 
     public Usuario() {
     }
@@ -25,16 +31,12 @@ public class Usuario {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getNomeUsuario() {
+        return nomeUsuario;
     }
 
-    public String getNome_usuario() {
-        return nome_usuario;
-    }
-
-    public void setNome_usuario(String nome_usuario) {
-        this.nome_usuario = nome_usuario;
+    public void setNomeUsuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
     }
 
     public String getEmail() {
@@ -57,7 +59,7 @@ public class Usuario {
         return tarefas;
     }
 
-    public void setTarefas(List<Tarefa> tarefas) {
-        this.tarefas = tarefas;
+    public List<Material> getMateriais() {
+        return materiais;
     }
 }

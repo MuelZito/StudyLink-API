@@ -3,7 +3,7 @@ package com.visionwork.studylink.controllers;
 import com.visionwork.studylink.dto.usuario.insert.UserLoginDTO;
 import com.visionwork.studylink.dto.usuario.insert.UserRegisterDTO;
 import com.visionwork.studylink.dto.usuario.read.ReponseDTO;
-import com.visionwork.studylink.entities.Usuario;
+import com.visionwork.studylink.models.usuario.Usuario;
 import com.visionwork.studylink.repositories.UsuarioRepository;
 import com.visionwork.studylink.security.TokenService;
 import jakarta.validation.Valid;
@@ -34,7 +34,7 @@ public class AuthController {
 
         if (passwordEncoder.matches(userLoginDTO.senha(), usuario.getSenha())) {
             String token = this.tokenService.geracaoToke(usuario);
-            return ResponseEntity.ok(new ReponseDTO(usuario.getNome_usuario(), token));
+            return ResponseEntity.ok(new ReponseDTO(usuario.getNomeUsuario(), token));
         }
 
         return ResponseEntity.badRequest().build();
@@ -48,11 +48,11 @@ public class AuthController {
             Usuario novoUsuario = new Usuario();
             novoUsuario.setSenha(passwordEncoder.encode(userRegisterDTO.senha()));
             novoUsuario.setEmail(userRegisterDTO.email());
-            novoUsuario.setNome_usuario(userRegisterDTO.nome_usuario());
+            novoUsuario.setNomeUsuario(userRegisterDTO.nome_usuario());
             this.repository.save(novoUsuario);
 
             String token = this.tokenService.geracaoToke(novoUsuario);
-            return ResponseEntity.ok(new ReponseDTO(novoUsuario.getNome_usuario(), token));
+            return ResponseEntity.ok(new ReponseDTO(novoUsuario.getNomeUsuario(), token));
 
         }
         return ResponseEntity.badRequest().build();

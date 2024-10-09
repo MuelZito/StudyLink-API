@@ -1,7 +1,8 @@
-package com.visionwork.studylink.entities;
+package com.visionwork.studylink.models.tarefa;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.visionwork.studylink.dto.tarefa.insert.TarefaUpdateDTO;
+import com.visionwork.studylink.models.usuario.Usuario;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

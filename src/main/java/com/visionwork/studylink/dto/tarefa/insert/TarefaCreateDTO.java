@@ -1,6 +1,6 @@
 package com.visionwork.studylink.dto.tarefa.insert;
 
-import com.visionwork.studylink.entities.PrioridadeType;
+import com.visionwork.studylink.models.tarefa.PrioridadeType;
 
 import java.time.LocalDate;
 

@@ -4,7 +4,6 @@ package com.visionwork.studylink.controllers;
 import com.visionwork.studylink.dto.tarefa.insert.TarefaCreateDTO;
 import com.visionwork.studylink.dto.tarefa.insert.TarefaUpdateDTO;
 import com.visionwork.studylink.dto.tarefa.read.TarefaReadDTO;
-import com.visionwork.studylink.entities.Tarefa;
 import com.visionwork.studylink.services.TarefaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
