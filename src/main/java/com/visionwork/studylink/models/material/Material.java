@@ -2,6 +2,7 @@ package com.visionwork.studylink.models.material;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.visionwork.studylink.dto.material.MaterialUpdateDTO;
 import com.visionwork.studylink.models.usuario.Usuario;
 import jakarta.persistence.*;
 
@@ -71,6 +72,11 @@ public class Material {
 
     public void setAnotacoes(List<Anotacao> anotacoes) {
         this.anotacoes = anotacoes;
+    }
+
+    public void update(MaterialUpdateDTO materialAtualizado){
+        this.titulo = materialAtualizado.titulo();
+        this.areaConhecimento = materialAtualizado.areaConhecimento();
     }
 
     public static final class Builder {
