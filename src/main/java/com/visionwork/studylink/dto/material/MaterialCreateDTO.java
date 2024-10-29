@@ -1,7 +1,10 @@
 package com.visionwork.studylink.dto.material;
 
-public record MaterialCreateDTO (
+import com.visionwork.studylink.models.material.Visibilidade;
+
+public record MaterialCreateDTO(
         String titulo,
-        String areaConhecimento
-){
+        String areaConhecimento,
+        Visibilidade visibilidade
+) {
 }

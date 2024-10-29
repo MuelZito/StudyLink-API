@@ -15,8 +15,14 @@ public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String titulo;
     private String areaConhecimento;
+    private String banner;
+
+
+    @Enumerated(EnumType.STRING)
+    private Visibilidade visibilidade;
     @ManyToOne
     @JsonBackReference
     private Usuario usuario;
@@ -26,10 +32,12 @@ public class Material {
     public Material() {
     }
 
-    private Material(Long id, String titulo, String areaConhecimento, Usuario usuario) {
+    private Material(Long id, String titulo, String areaConhecimento, String banner, Visibilidade visibilidade, Usuario usuario) {
         this.id = id;
         this.titulo = titulo;
         this.areaConhecimento = areaConhecimento;
+        this.banner = banner;
+        this.visibilidade = visibilidade;
         this.usuario = usuario;
     }
 
@@ -38,43 +46,31 @@ public class Material {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getTitulo() {
         return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
     }
 
     public String getAreaConhecimento() {
         return areaConhecimento;
     }
 
-    public void setAreaConhecimento(String areaConhecimento) {
-        this.areaConhecimento = areaConhecimento;
+    public String getBanner() {
+        return banner;
+    }
+
+    public Visibilidade getVisibilidade() {
+        return visibilidade;
     }
 
     public Usuario getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
     public List<Anotacao> getAnotacoes() {
         return anotacoes;
     }
 
-    public void setAnotacoes(List<Anotacao> anotacoes) {
-        this.anotacoes = anotacoes;
-    }
-
-    public void update(MaterialUpdateDTO materialAtualizado){
+    public void update(MaterialUpdateDTO materialAtualizado) {
         this.titulo = materialAtualizado.titulo();
         this.areaConhecimento = materialAtualizado.areaConhecimento();
     }
@@ -83,6 +79,9 @@ public class Material {
         private Long id;
         private String titulo;
         private String areaConhecimento;
+        private String banner;
+        private Visibilidade visibilidade = Visibilidade.PRIVADO;
+
         private Usuario usuario;
         private List<Anotacao> anotacoes;
 
@@ -104,6 +103,16 @@ public class Material {
             return this;
         }
 
+        public Builder banner(String banner) {
+            this.banner = banner;
+            return this;
+        }
+
+        public Builder visibilidade(Visibilidade visibilidade) {
+            this.visibilidade = visibilidade;
+            return this;
+        }
+
         public Builder usuario(Usuario usuario) {
             this.usuario = usuario;
             return this;
@@ -115,13 +124,7 @@ public class Material {
         }
 
         public Material build() {
-            Material material = new Material();
-            material.setId(id);
-            material.setTitulo(titulo);
-            material.setAreaConhecimento(areaConhecimento);
-            material.setUsuario(usuario);
-            material.setAnotacoes(anotacoes);
-            return material;
+            return new Material(null, titulo, areaConhecimento, banner, visibilidade, usuario);
         }
     }
 }

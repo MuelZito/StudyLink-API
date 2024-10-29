@@ -31,4 +31,11 @@ public class MaterialController {
         MaterialReadDTO materialAtualizado = materialService.atualizarMaterial(id, materialUpdateDTO);
         return ResponseEntity.ok(materialAtualizado);
     }
+
+    @GetMapping("/material/{id}")
+    public ResponseEntity<MaterialReadDTO> visualizarMaterial(@PathVariable Long id) {
+        MaterialReadDTO material = materialService.visualizarMaterial(id);
+        return ResponseEntity.ok(material);
+    }
+
 }

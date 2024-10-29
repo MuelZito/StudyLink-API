@@ -4,6 +4,7 @@ import com.visionwork.studylink.dto.material.MaterialCreateDTO;
 import com.visionwork.studylink.dto.material.MaterialReadDTO;
 import com.visionwork.studylink.dto.material.MaterialUpdateDTO;
 import com.visionwork.studylink.models.material.Material;
+import com.visionwork.studylink.models.material.Visibilidade;
 import com.visionwork.studylink.models.usuario.Usuario;
 import com.visionwork.studylink.repositories.MaterialRepository;
 import com.visionwork.studylink.repositories.UsuarioRepository;
@@ -25,6 +26,7 @@ public class MaterialService {
         Material material = new Material.Builder()
                 .titulo(materialCreateDTO.titulo())
                 .areaConhecimento(materialCreateDTO.areaConhecimento())
+                .visibilidade(materialCreateDTO.visibilidade())
                 .usuario(principal)
                 .build();
         material = materialRepository.save(material);
@@ -39,5 +41,19 @@ public class MaterialService {
                 orElseThrow(() -> new AccessDeniedException("Você não tem permissão para alterar esse Material"));
         material.update(materialUpdateDTO);
         return new MaterialReadDTO(material);
+    }
+
+    @Transactional
+    public MaterialReadDTO visualizarMaterial(Long id) {
+        Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Material material = materialRepository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException("Material com " + id + " não encontrado"));
+
+        if (material.getVisibilidade() == Visibilidade.PUBLICO ||
+                material.getUsuario().getId().equals(principal.getId())) {
+            return new MaterialReadDTO(material);
+        } else {
+            throw new AccessDeniedException("Permissão negada para visualizar este material");
+        }
     }
 }
