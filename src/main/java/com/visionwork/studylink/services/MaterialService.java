@@ -26,6 +26,7 @@ public class MaterialService {
         Material material = new Material.Builder()
                 .titulo(materialCreateDTO.titulo())
                 .areaConhecimento(materialCreateDTO.areaConhecimento())
+                .banner(materialCreateDTO.banner())
                 .visibilidade(materialCreateDTO.visibilidade())
                 .usuario(principal)
                 .build();

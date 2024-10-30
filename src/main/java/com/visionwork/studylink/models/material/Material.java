@@ -73,6 +73,8 @@ public class Material {
     public void update(MaterialUpdateDTO materialAtualizado) {
         this.titulo = materialAtualizado.titulo();
         this.areaConhecimento = materialAtualizado.areaConhecimento();
+        this.banner = materialAtualizado.banner();
+        this.visibilidade = materialAtualizado.visibilidade();
     }
 
     public static final class Builder {
