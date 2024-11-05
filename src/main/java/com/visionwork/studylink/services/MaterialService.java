@@ -2,17 +2,20 @@ package com.visionwork.studylink.services;
 
 import com.visionwork.studylink.dto.material.MaterialCreateDTO;
 import com.visionwork.studylink.dto.material.MaterialReadDTO;
+import com.visionwork.studylink.dto.material.MaterialSearchDTO;
 import com.visionwork.studylink.dto.material.MaterialUpdateDTO;
 import com.visionwork.studylink.models.material.Material;
 import com.visionwork.studylink.models.material.Visibilidade;
 import com.visionwork.studylink.models.usuario.Usuario;
 import com.visionwork.studylink.repositories.MaterialRepository;
-import com.visionwork.studylink.repositories.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MaterialService {
@@ -45,16 +48,15 @@ public class MaterialService {
     }
 
     @Transactional
-    public MaterialReadDTO visualizarMaterial(Long id) {
+    public List<MaterialSearchDTO> pesquisarMaterial(String titulo) {
         Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Material material = materialRepository.findById(id).
-                orElseThrow(() -> new IllegalArgumentException("Material com " + id + " não encontrado"));
 
-        if (material.getVisibilidade() == Visibilidade.PUBLICO ||
-                material.getUsuario().getId().equals(principal.getId())) {
-            return new MaterialReadDTO(material);
-        } else {
-            throw new AccessDeniedException("Permissão negada para visualizar este material");
-        }
+        List<Material> materials = materialRepository.findByTituloContainingIgnoreCase(titulo).stream()
+                .filter(material -> material.getVisibilidade() == Visibilidade.PUBLICO)
+                .collect(Collectors.toList());
+        return materials.stream()
+                .map(MaterialSearchDTO::new)
+                .collect(Collectors.toList());
     }
+
 }
