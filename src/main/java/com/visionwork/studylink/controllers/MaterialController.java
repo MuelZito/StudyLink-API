@@ -21,6 +21,7 @@ public class MaterialController {
 
     @Autowired
     MaterialService materialService;
+    private Material material;
 
 
     @PostMapping(value = "/materiais")
@@ -35,11 +36,17 @@ public class MaterialController {
         return ResponseEntity.ok(materialAtualizado);
     }
 
-    @GetMapping("/material/pesquisar")
+    @GetMapping("/materiais/pesquisar")
     public ResponseEntity<List<MaterialSearchDTO>> pesquisarMaterial(@RequestParam String titulo) {
 
         List<MaterialSearchDTO> material = materialService.pesquisarMaterial(titulo);
         return ResponseEntity.ok(material);
+    }
+
+    @DeleteMapping("/materiais/{id}")
+    public ResponseEntity<String> deletarMaterial(@PathVariable Long id){
+        materialService.deleteById(id);
+        return ResponseEntity.ok("Material deletado com sucesso!");
     }
 
 }

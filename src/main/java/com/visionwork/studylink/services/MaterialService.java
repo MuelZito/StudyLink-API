@@ -6,6 +6,7 @@ import com.visionwork.studylink.dto.material.MaterialSearchDTO;
 import com.visionwork.studylink.dto.material.MaterialUpdateDTO;
 import com.visionwork.studylink.models.material.Material;
 import com.visionwork.studylink.models.material.Visibilidade;
+import com.visionwork.studylink.models.tarefa.Tarefa;
 import com.visionwork.studylink.models.usuario.Usuario;
 import com.visionwork.studylink.repositories.MaterialRepository;
 import jakarta.transaction.Transactional;
@@ -29,7 +30,7 @@ public class MaterialService {
         Material material = new Material.Builder()
                 .titulo(materialCreateDTO.titulo())
                 .areaConhecimento(materialCreateDTO.areaConhecimento())
-                .banner(materialCreateDTO.banner())
+                .imagemBanner(materialCreateDTO.imagemBanner())
                 .visibilidade(materialCreateDTO.visibilidade())
                 .usuario(principal)
                 .build();
@@ -57,6 +58,14 @@ public class MaterialService {
         return materials.stream()
                 .map(MaterialSearchDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteById(Long id){
+        Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Material material = materialRepository.findByIdAndUsuario(id, principal).
+                orElseThrow(() -> new AccessDeniedException("Você não tem permissão pra deletar essa tarefa"));
+        materialRepository.delete(material);
     }
 
 }

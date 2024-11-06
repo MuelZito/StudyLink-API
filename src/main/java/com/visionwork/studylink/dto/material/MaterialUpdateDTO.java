@@ -5,7 +5,7 @@ import com.visionwork.studylink.models.material.Visibilidade;
 public record MaterialUpdateDTO(
         String titulo,
         String areaConhecimento,
-        String banner,
+        String imagemBanner,
         Visibilidade visibilidade
 ) {
 }

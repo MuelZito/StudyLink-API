@@ -18,9 +18,8 @@ public class Material {
 
     private String titulo;
     private String areaConhecimento;
-    private String banner;
-
-
+    @Column(columnDefinition = "LONGTEXT")
+    private String imagemBanner;
     @Enumerated(EnumType.STRING)
     private Visibilidade visibilidade;
     @ManyToOne
@@ -32,11 +31,11 @@ public class Material {
     public Material() {
     }
 
-    private Material(Long id, String titulo, String areaConhecimento, String banner, Visibilidade visibilidade, Usuario usuario) {
+    private Material(Long id, String titulo, String areaConhecimento, String imagemBanner, Visibilidade visibilidade, Usuario usuario) {
         this.id = id;
         this.titulo = titulo;
         this.areaConhecimento = areaConhecimento;
-        this.banner = banner;
+        this.imagemBanner = imagemBanner;
         this.visibilidade = visibilidade;
         this.usuario = usuario;
     }
@@ -54,8 +53,8 @@ public class Material {
         return areaConhecimento;
     }
 
-    public String getBanner() {
-        return banner;
+    public String getImagemBanner() {
+        return imagemBanner;
     }
 
     public Visibilidade getVisibilidade() {
@@ -73,7 +72,7 @@ public class Material {
     public void update(MaterialUpdateDTO materialAtualizado) {
         this.titulo = materialAtualizado.titulo();
         this.areaConhecimento = materialAtualizado.areaConhecimento();
-        this.banner = materialAtualizado.banner();
+        this.imagemBanner = materialAtualizado.imagemBanner();
         this.visibilidade = materialAtualizado.visibilidade();
     }
 
@@ -81,7 +80,7 @@ public class Material {
         private Long id;
         private String titulo;
         private String areaConhecimento;
-        private String banner;
+        private String imagemBanner;
         private Visibilidade visibilidade = Visibilidade.PRIVADO;
 
         private Usuario usuario;
@@ -105,8 +104,8 @@ public class Material {
             return this;
         }
 
-        public Builder banner(String banner) {
-            this.banner = banner;
+        public Builder imagemBanner(String imageBanner) {
+            this.imagemBanner = imageBanner;
             return this;
         }
 
@@ -126,7 +125,7 @@ public class Material {
         }
 
         public Material build() {
-            return new Material(null, titulo, areaConhecimento, banner, visibilidade, usuario);
+            return new Material(null, titulo, areaConhecimento, imagemBanner, visibilidade, usuario);
         }
     }
 }
