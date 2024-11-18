@@ -7,12 +7,14 @@ import com.visionwork.studylink.models.usuario.Usuario;
 import com.visionwork.studylink.repositories.UsuarioRepository;
 import com.visionwork.studylink.security.TokenService;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-@CrossOrigin(origins = "http://localhost:4200")
+
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -34,7 +36,20 @@ public class AuthController {
 
         if (passwordEncoder.matches(userLoginDTO.senha(), usuario.getSenha())) {
             String token = this.tokenService.geracaoToke(usuario);
-            return ResponseEntity.ok(new ReponseDTO(usuario.getNomeUsuario(), token));
+
+            ResponseCookie cookie = ResponseCookie.from("token", token)
+                    .httpOnly(true)
+                    .secure(true)
+                    .path("/")
+                    .maxAge(7 * 24 * 60 * 60)
+                    .sameSite("Strict")
+                    .build();
+
+
+
+            return ResponseEntity.ok()
+                    .header("Set-Cookie", cookie.toString())
+                    .body(new ReponseDTO(usuario.getNomeUsuario(), token));
         }
 
         return ResponseEntity.badRequest().build();
@@ -52,7 +67,19 @@ public class AuthController {
             this.repository.save(novoUsuario);
 
             String token = this.tokenService.geracaoToke(novoUsuario);
-            return ResponseEntity.ok(new ReponseDTO(novoUsuario.getNomeUsuario(), token));
+
+            ResponseCookie cookie = ResponseCookie.from("token", token)
+                    .httpOnly(true)
+                    .secure(true)
+                    .path("/")
+                    .maxAge(7 * 24 * 60 * 60)
+                    .sameSite("Strict")
+                    .build();
+
+            return ResponseEntity.ok()
+                    .header("Set-Cookie", cookie.toString())
+                    .body(new ReponseDTO(novoUsuario.getNomeUsuario(), token));
+
 
         }
         return ResponseEntity.badRequest().build();
