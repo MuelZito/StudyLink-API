@@ -23,8 +23,13 @@ public class MaterialController {
     MaterialService materialService;
     private Material material;
 
+    @GetMapping(value = "/materiais")
+    public ResponseEntity<List<MaterialReadDTO>> listarMateriais() {
+        List<MaterialReadDTO> materiais = materialService.listarMateriais();
+        return ResponseEntity.ok(materiais);
+    }
 
-    @PostMapping(value = "/materiais")
+    @PostMapping(value = "/materiais/add")
     public ResponseEntity<MaterialReadDTO> criarMaterial(@RequestBody MaterialCreateDTO material) {
         MaterialReadDTO criarMaterial = materialService.criarMaterial(material);
         return ResponseEntity.ok(criarMaterial);

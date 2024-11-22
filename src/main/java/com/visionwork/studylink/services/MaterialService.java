@@ -40,6 +40,19 @@ public class MaterialService {
     }
 
     @Transactional
+    public List<MaterialReadDTO> listarMateriais() {
+        Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // Busca todos os materiais criados pelo usuário autenticado
+        List<Material> materiais = materialRepository.findByUsuario(principal);
+
+        // Converte os materiais para DTOs e retorna a lista
+        return materiais.stream()
+                .map(MaterialReadDTO::new)
+                .collect(Collectors.toList());
+    }
+
+
+    @Transactional
     public MaterialReadDTO atualizarMaterial(Long id, MaterialUpdateDTO materialUpdateDTO) {
         Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Material material = materialRepository.findByIdAndUsuario(id, principal).

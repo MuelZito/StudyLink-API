@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface MaterialRepository extends JpaRepository<Material, Long> {
     Optional<Material> findByIdAndUsuario(Long id, Usuario usuario);
     List<Material> findByTituloContainingIgnoreCase(String titulo);
+    List<Material> findByUsuario(Usuario usuario);
 }
