@@ -25,6 +25,19 @@ public class MaterialService {
     private MaterialRepository materialRepository;
 
     @Transactional
+    public List<MaterialReadDTO> listarMateriaisPublicos() {
+        // Supondo que você tenha um repositório de Material
+        List<Material> materiais = materialRepository.findAll();
+
+        // Filtra apenas os materiais com visibilidade PUBLICO
+        return materiais.stream()
+                .filter(material -> material.getVisibilidade() == Visibilidade.PUBLICO)
+                .map(material -> new MaterialReadDTO(material))
+                .collect(Collectors.toList());
+    }
+
+
+    @Transactional
     public MaterialReadDTO criarMaterial(MaterialCreateDTO materialCreateDTO) {
         Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Material material = new Material.Builder()
@@ -50,7 +63,6 @@ public class MaterialService {
                 .map(MaterialReadDTO::new)
                 .collect(Collectors.toList());
     }
-
 
     @Transactional
     public MaterialReadDTO atualizarMaterial(Long id, MaterialUpdateDTO materialUpdateDTO) {

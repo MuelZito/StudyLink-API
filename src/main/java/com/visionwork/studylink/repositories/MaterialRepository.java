@@ -1,6 +1,7 @@
 package com.visionwork.studylink.repositories;
 
 import com.visionwork.studylink.models.material.Material;
+import com.visionwork.studylink.models.material.Visibilidade;
 import com.visionwork.studylink.models.usuario.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,4 +12,6 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     Optional<Material> findByIdAndUsuario(Long id, Usuario usuario);
     List<Material> findByTituloContainingIgnoreCase(String titulo);
     List<Material> findByUsuario(Usuario usuario);
+    List<Material> findByVisibilidade(Visibilidade visibilidade);
+
 }
