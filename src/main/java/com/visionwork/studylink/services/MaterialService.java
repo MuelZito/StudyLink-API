@@ -15,6 +15,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,13 +75,20 @@ public class MaterialService {
     }
 
     @Transactional
-    public List<MaterialSearchDTO> pesquisarMaterial(String titulo) {
+    public List<MaterialSearchDTO> pesquisarMaterial(String termoPesquisa) {
+        if (termoPesquisa == null || termoPesquisa.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+
         Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        List<Material> materials = materialRepository.findByTituloContainingIgnoreCase(titulo).stream()
-                .filter(material -> material.getVisibilidade() == Visibilidade.PUBLICO)
-                .collect(Collectors.toList());
+        List<Material> materials = materialRepository.findByTituloContainingIgnoreCaseOrAreaConhecimentoContainingIgnoreCase(
+                termoPesquisa.trim(),
+                termoPesquisa.trim()
+        );
+
         return materials.stream()
+                .filter(material -> material.getVisibilidade() == Visibilidade.PUBLICO)
                 .map(MaterialSearchDTO::new)
                 .collect(Collectors.toList());
     }

@@ -13,5 +13,8 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     List<Material> findByTituloContainingIgnoreCase(String titulo);
     List<Material> findByUsuario(Usuario usuario);
     List<Material> findByVisibilidade(Visibilidade visibilidade);
-
+    List<Material> findByTituloContainingIgnoreCaseOrAreaConhecimentoContainingIgnoreCase(
+            String titulo,
+            String areaConhecimento
+    );
 }

@@ -6,7 +6,7 @@ import com.visionwork.studylink.models.material.Visibilidade;
 public record MaterialSearchDTO(
         String titulo,
         String areaConhecimento,
-
+        String imagemBanner,
         Visibilidade visibilidade,
         String usuarioDono
 ) {
@@ -14,6 +14,7 @@ public record MaterialSearchDTO(
         this(
                 material.getTitulo(),
                 material.getAreaConhecimento(),
+                material.getImagemBanner(),
                 material.getVisibilidade(),
                 material.getUsuario().getNomeUsuario());
     }

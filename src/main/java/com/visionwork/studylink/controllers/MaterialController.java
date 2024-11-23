@@ -47,12 +47,12 @@ public class MaterialController {
         MaterialReadDTO materialAtualizado = materialService.atualizarMaterial(id, materialUpdateDTO);
         return ResponseEntity.ok(materialAtualizado);
     }
-
     @GetMapping("/materiais/pesquisar")
-    public ResponseEntity<List<MaterialSearchDTO>> pesquisarMaterial(@RequestParam String titulo) {
+    public ResponseEntity<List<MaterialSearchDTO>> pesquisarMaterial(
+            @RequestParam(required = false) String termoPesquisa) {
 
-        List<MaterialSearchDTO> material = materialService.pesquisarMaterial(titulo);
-        return ResponseEntity.ok(material);
+        List<MaterialSearchDTO> materiais = materialService.pesquisarMaterial(termoPesquisa);
+        return ResponseEntity.ok(materiais);
     }
 
     @DeleteMapping("/materiais/{id}")
