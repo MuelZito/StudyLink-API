@@ -12,11 +12,18 @@ import java.util.ArrayList;
 
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
+
     @Autowired
     private UsuarioRepository repository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = this.repository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado"));
-        return new org.springframework.security.core.userdetails.User(usuario.getEmail(), usuario.getSenha(), new ArrayList<>());
+        Usuario usuario = this.repository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado"));
+        return new org.springframework.security.core.userdetails.User(
+                usuario.getEmail(),
+                usuario.getSenha(),
+                new ArrayList<>()
+        );
     }
 }

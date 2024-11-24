@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api")
 public class AuthController {
     private final UsuarioRepository repository;
     private final PasswordEncoder passwordEncoder;

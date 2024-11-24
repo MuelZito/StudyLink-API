@@ -17,28 +17,35 @@ public class TokenService {
 
     @Value("${api.security.token.secret}")
     private String secret;
-    public String geracaoToke(Usuario usuario){
-        try{
-            Algorithm algoritmo = Algorithm.HMAC256(secret);
 
-            String token = JWT.create().withIssuer("login-auth-studyLink").withSubject(usuario.getEmail()).withExpiresAt(this.geracaoExepiracaoData()).sign(algoritmo);
+    public String geracaoToke(Usuario usuario) {
+        try {
+            Algorithm algoritmo = Algorithm.HMAC256(secret);
+            String token = JWT.create()
+                    .withIssuer("login-auth-studyLink")
+                    .withSubject(usuario.getEmail())
+                    .withExpiresAt(this.geracaoExepiracaoData())
+                    .sign(algoritmo);
             return token;
-        }catch (JWTCreationException exeception){
-            throw  new RuntimeException("Erro ao autenticar");
+        } catch (JWTCreationException exception) {
+            throw new RuntimeException("Erro ao gerar token");
         }
     }
 
-    public String validacaoToken(String token){
+    public String validacaoToken(String token) {
         try {
             Algorithm algoritmo = Algorithm.HMAC256(secret);
-            return (JWT.require(algoritmo).withIssuer("login-auth-studyLink").build().verify(token).getSubject());
-        }catch (JWTVerificationException exception){
+            return JWT.require(algoritmo)
+                    .withIssuer("login-auth-studyLink")
+                    .build()
+                    .verify(token)
+                    .getSubject();
+        } catch (JWTVerificationException exception) {
             return null;
         }
     }
 
-    private Instant geracaoExepiracaoData(){
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-3"));
+    private Instant geracaoExepiracaoData() {
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
-
 }
