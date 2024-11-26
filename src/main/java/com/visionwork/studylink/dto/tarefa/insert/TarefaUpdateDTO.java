@@ -4,12 +4,13 @@ import com.visionwork.studylink.models.tarefa.PrioridadeType;
 import com.visionwork.studylink.models.tarefa.StatusType;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record TarefaUpdateDTO(
         String titulo,
         String descricao,
-        LocalDate dataInicio,
-        LocalDate dataFim,
+        LocalDateTime dataInicio,
+        LocalDateTime dataFim,
         PrioridadeType prioridade,
         String color
 

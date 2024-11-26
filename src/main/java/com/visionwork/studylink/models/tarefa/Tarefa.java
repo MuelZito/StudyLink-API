@@ -1,12 +1,14 @@
 package com.visionwork.studylink.models.tarefa;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.visionwork.studylink.dto.tarefa.insert.TarefaUpdateDTO;
 import com.visionwork.studylink.models.usuario.Usuario;
 import jakarta.persistence.*;
 
 import java.awt.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tarefas")
@@ -16,8 +18,10 @@ public class Tarefa {
     private Long id;
     private String titulo;
     private String descricao;
-    private LocalDate dataInicio;
-    private LocalDate dataFim;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime dataInicio;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime dataFim;
     @Enumerated(EnumType.STRING)
     private PrioridadeType prioridade;
     private String color;
@@ -28,7 +32,7 @@ public class Tarefa {
     public Tarefa() {
     }
 
-    public Tarefa(Long id, String titulo, String descricao, LocalDate dataInicio, LocalDate dataFim,
+    public Tarefa(Long id, String titulo, String descricao, LocalDateTime dataInicio, LocalDateTime dataFim,
                    PrioridadeType prioridade,  String color, Usuario usuario) {
         this.id = id;
         this.titulo = titulo;
@@ -53,11 +57,11 @@ public class Tarefa {
         return descricao;
     }
 
-    public LocalDate getDataInicio() {
+    public LocalDateTime getDataInicio() {
         return dataInicio;
     }
 
-    public LocalDate getDataFim() {
+    public LocalDateTime getDataFim() {
         return dataFim;
     }
 
@@ -84,8 +88,8 @@ public class Tarefa {
     public static final class Builder {
         private String titulo;
         private String descricao;
-        private LocalDate dataInicio;
-        private LocalDate dataFim;
+        private LocalDateTime dataInicio;
+        private LocalDateTime dataFim;
         private PrioridadeType prioridade;
         private String color;
         private Usuario usuario;
@@ -103,12 +107,12 @@ public class Tarefa {
             return this;
         }
 
-        public Builder dataInicio(LocalDate dataInicio) {
+        public Builder dataInicio(LocalDateTime dataInicio) {
             this.dataInicio = dataInicio;
             return this;
         }
 
-        public Builder dataFim(LocalDate dataFim) {
+        public Builder dataFim(LocalDateTime dataFim) {
             this.dataFim = dataFim;
             return this;
         }

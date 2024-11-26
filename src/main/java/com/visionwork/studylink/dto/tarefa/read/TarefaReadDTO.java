@@ -5,22 +5,26 @@ import com.visionwork.studylink.models.tarefa.StatusType;
 import com.visionwork.studylink.models.tarefa.Tarefa;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Locale;
 
 public class TarefaReadDTO {
     private Long id;
     private String titulo;
     private String descricao;
-    private LocalDate dataFim;
+    private LocalDateTime dataInicio;
+    private LocalDateTime dataFim;
     private PrioridadeType prioridade;
     private String color;
 
     public TarefaReadDTO() {
     }
 
-    public TarefaReadDTO(Long id, String titulo, String descricao, LocalDate dataFim, PrioridadeType prioridade, String color) {
+    public TarefaReadDTO(Long id, String titulo, String descricao, LocalDateTime dataInicio ,LocalDateTime dataFim, PrioridadeType prioridade, String color) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
+        this.dataInicio = dataInicio;
         this.dataFim = dataFim;
         this.prioridade = prioridade;
         this.color = color;
@@ -46,10 +50,12 @@ public class TarefaReadDTO {
     public String getDescricao() {
         return descricao;
     }
-    public LocalDate getDataFim() {
+
+    public  LocalDateTime getDataInicio(){return  dataInicio;}
+
+    public LocalDateTime getDataFim() {
         return dataFim;
     }
-
 
     public PrioridadeType getPrioridade() {
         return prioridade;
