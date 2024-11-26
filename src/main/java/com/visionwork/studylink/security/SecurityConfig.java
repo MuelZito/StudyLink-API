@@ -41,6 +41,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/materiais/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/materiais/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/materiais/**").authenticated()
+
+                        .requestMatchers(HttpMethod.GET, "/api/tarefas/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/tarefas/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/tarefas/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/tarefas/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
