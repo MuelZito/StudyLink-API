@@ -9,6 +9,7 @@ public record TarefaCreateDTO(
         String descricao,
         LocalDate dataInicio,
         LocalDate dataFim,
-        PrioridadeType prioridade
+        PrioridadeType prioridade,
+        String color
 ) {
 }

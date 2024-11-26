@@ -11,6 +11,7 @@ public record TarefaUpdateDTO(
         LocalDate dataInicio,
         LocalDate dataFim,
         PrioridadeType prioridade,
-        StatusType status
+        String color
+
 ) {
 }

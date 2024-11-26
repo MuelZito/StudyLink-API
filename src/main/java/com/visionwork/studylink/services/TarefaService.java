@@ -32,6 +32,7 @@ public class TarefaService {
                 .dataInicio(tarefaCreateDTO.dataInicio())
                 .dataFim(tarefaCreateDTO.dataFim())
                 .prioridade(tarefaCreateDTO.prioridade())
+                .color(tarefaCreateDTO.color())
                 .usuario(principal)
                 .build();
         tarefa = tarefasRepository.save(tarefa);

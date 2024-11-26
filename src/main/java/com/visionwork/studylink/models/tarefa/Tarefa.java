@@ -5,6 +5,7 @@ import com.visionwork.studylink.dto.tarefa.insert.TarefaUpdateDTO;
 import com.visionwork.studylink.models.usuario.Usuario;
 import jakarta.persistence.*;
 
+import java.awt.*;
 import java.time.LocalDate;
 
 @Entity
@@ -18,9 +19,8 @@ public class Tarefa {
     private LocalDate dataInicio;
     private LocalDate dataFim;
     @Enumerated(EnumType.STRING)
-    private StatusType status;
-    @Enumerated(EnumType.STRING)
     private PrioridadeType prioridade;
+    private String color;
     @ManyToOne
     @JsonBackReference
     private Usuario usuario;
@@ -29,14 +29,14 @@ public class Tarefa {
     }
 
     public Tarefa(Long id, String titulo, String descricao, LocalDate dataInicio, LocalDate dataFim,
-                  StatusType status, PrioridadeType prioridade, Usuario usuario) {
+                   PrioridadeType prioridade,  String color, Usuario usuario) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
-        this.status = status;
         this.prioridade = prioridade;
+        this.color = color;
         this.usuario = usuario;
     }
 
@@ -61,13 +61,12 @@ public class Tarefa {
         return dataFim;
     }
 
-    public StatusType getStatus() {
-        return status;
-    }
 
     public PrioridadeType getPrioridade() {
         return prioridade;
     }
+
+    public String getColor() {return  color;}
 
     public Usuario getUsuario() {
         return usuario;
@@ -78,8 +77,8 @@ public class Tarefa {
         this.descricao = tarefaAtualizada.descricao();
         this.dataInicio = tarefaAtualizada.dataInicio();
         this.dataFim = tarefaAtualizada.dataFim();
-        this.status = tarefaAtualizada.status();
         this.prioridade = tarefaAtualizada.prioridade();
+        this.color = tarefaAtualizada.color();
     }
 
     public static final class Builder {
@@ -87,8 +86,8 @@ public class Tarefa {
         private String descricao;
         private LocalDate dataInicio;
         private LocalDate dataFim;
-        private StatusType status = StatusType.PENDENTE;
         private PrioridadeType prioridade;
+        private String color;
         private Usuario usuario;
 
         public Builder() {
@@ -114,13 +113,12 @@ public class Tarefa {
             return this;
         }
 
-        public Builder status(StatusType status) {
-            this.status = status;
-            return this;
-        }
-
         public Builder prioridade(PrioridadeType prioridade) {
             this.prioridade = prioridade;
+            return this;
+        }
+        public Builder color(String color) {
+            this.color = color;
             return this;
         }
 
@@ -130,7 +128,7 @@ public class Tarefa {
         }
 
         public Tarefa build() {
-            return new Tarefa(null, titulo, descricao, dataInicio, dataFim, status, prioridade, usuario);
+            return new Tarefa(null, titulo, descricao, dataInicio, dataFim, prioridade,color, usuario);
         }
     }
 }
