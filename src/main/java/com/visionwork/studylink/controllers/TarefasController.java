@@ -39,12 +39,19 @@ public class TarefasController {
             @RequestBody TarefaUpdateDTO tarefa,
             @RequestParam(required = false, defaultValue = "false") boolean editarRecorrenciaInteira) {
 
-        // Chamar o método do serviço com os parâmetros necessários
-        TarefaReadDTO tarefaAtualizada = tarefaService.alterarTarefa(id, tarefa, editarRecorrenciaInteira);
+        TarefaReadDTO tarefaAtualizada;
 
-        // Retornar a resposta com o DTO atualizado
+        if (tarefa.recurrenceID() != null && !editarRecorrenciaInteira) {
+            tarefaAtualizada = tarefaService.alterarOcorrenciaUnica(id, tarefa);
+        } else {
+            tarefaAtualizada = tarefaService.alterarTarefa(id, tarefa, editarRecorrenciaInteira);
+        }
+
         return ResponseEntity.ok(tarefaAtualizada);
     }
+
+
+
 
 
     @GetMapping(value = "/tarefas/{dataInicio}/{dataFim}")

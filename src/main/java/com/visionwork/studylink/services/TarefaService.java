@@ -52,69 +52,78 @@ public class TarefaService {
     }
 
     @Transactional
+    public TarefaReadDTO alterarOcorrenciaUnica(Long id, TarefaUpdateDTO tarefaUpdateDTO) {
+        Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // Buscar tarefa original usando o recurrenceID
+        Tarefa tarefaOriginal = tarefasRepository.findByIdAndUsuario(tarefaUpdateDTO.recurrenceID(), principal)
+                .orElseThrow(() -> new AccessDeniedException("Tarefa não encontrada ou sem permissão"));
+
+        // Resto do código de criação da nova tarefa permanece o mesmo
+        Tarefa novaTarefa = new Tarefa.Builder()
+                .titulo(tarefaUpdateDTO.titulo())
+                .descricao(tarefaUpdateDTO.descricao())
+                .dataInicio(tarefaUpdateDTO.dataInicio())
+                .dataFim(tarefaUpdateDTO.dataFim())
+                .recurrenceRule(tarefaOriginal.getRecurrenceRule())
+                .recurrenceID(tarefaOriginal.getId())
+                .usuario(principal)
+                .build();
+
+        // Atualização da exceção de recorrência
+        if (tarefaOriginal.getRecurrenceException() == null) {
+            tarefaOriginal.setRecurrenceException(tarefaUpdateDTO.dataInicio().toString());
+        } else {
+            tarefaOriginal.setRecurrenceException(
+                    tarefaOriginal.getRecurrenceException() + "," + tarefaUpdateDTO.dataInicio().toString()
+            );
+        }
+
+        // Salva ambas as tarefas
+        tarefasRepository.save(tarefaOriginal);
+        novaTarefa = tarefasRepository.save(novaTarefa);
+
+        return new TarefaReadDTO(novaTarefa);
+    }
+
+
+
+
+    @Transactional
     public TarefaReadDTO alterarTarefa(Long id, TarefaUpdateDTO tarefaUpdateDTO, boolean editarRecorrenciaInteira) {
-        // Obter o usuário principal do contexto de segurança
         Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         // Buscar a tarefa original associada ao usuário
         Tarefa tarefaOriginal = tarefasRepository.findByIdAndUsuario(id, principal)
                 .orElseThrow(() -> new AccessDeniedException("Você não tem permissão para modificar esta tarefa"));
 
-        // Verificar se a tarefa é parte de uma recorrência
-        if (tarefaOriginal.getRecurrenceID() != null) {
-            if (editarRecorrenciaInteira) {
-                // Encontrar todas as tarefas associadas ao mesmo RecurrenceID
-                List<Tarefa> tarefasRecorrentes = tarefasRepository.findByRecurrenceID(tarefaOriginal.getRecurrenceID());
+        // Caso seja uma série de tarefas recorrentes
+        if (tarefaOriginal.getRecurrenceID() != null && editarRecorrenciaInteira) {
+            // Buscar todas as tarefas recorrentes pela mesma ID de recorrência
+            List<Tarefa> tarefasRecorrentes = tarefasRepository.findByRecurrenceID(tarefaOriginal.getRecurrenceID());
 
-                if (tarefasRecorrentes.isEmpty()) {
-                    throw new NoSuchElementException("Nenhuma tarefa recorrente encontrada para o ID de recorrência fornecido.");
-                }
-
-                // Atualizar todas as tarefas recorrentes
-                for (Tarefa tarefa : tarefasRecorrentes) {
-                    // Atualizar regra de recorrência (se aplicável)
-                    if (tarefa.getRecurrenceRule() == null || !tarefa.getRecurrenceRule().equals(tarefaUpdateDTO.recurrenceRule())) {
-                        tarefa.setRecurrenceRule(tarefaUpdateDTO.recurrenceRule());
-                    }
-                    atualizarTarefa(tarefa, tarefaUpdateDTO);
-                }
-
-                // Salvar alterações
-                tarefasRepository.saveAll(tarefasRecorrentes);
-            } else {
-                // Criar uma nova ocorrência única na série
-                Tarefa novaTarefa = new Tarefa();
-                novaTarefa.update(tarefaUpdateDTO);
-                novaTarefa.setRecurrenceID(tarefaOriginal.getRecurrenceID());
-
-                // Atualizar RecurrenceException da tarefa original
-                String novaExcecao = tarefaOriginal.getDataInicio().toString();
-                if (tarefaOriginal.getRecurrenceException() != null) {
-                    novaExcecao = tarefaOriginal.getRecurrenceException() + "," + novaExcecao;
-                }
-                tarefaOriginal.setRecurrenceException(novaExcecao);
-
-                // Salvar alterações
-                tarefasRepository.save(novaTarefa);
-                tarefasRepository.save(tarefaOriginal);
-
-                return new TarefaReadDTO(novaTarefa);
+            if (tarefasRecorrentes.isEmpty()) {
+                throw new NoSuchElementException("Nenhuma tarefa recorrente encontrada para o ID de recorrência fornecido.");
             }
-        } else {
-            // Atualizar tarefa única
-            atualizarTarefa(tarefaOriginal, tarefaUpdateDTO);
+
+            // Atualizar cada tarefa da série
+            for (Tarefa tarefa : tarefasRecorrentes) {
+                tarefa.update(tarefaUpdateDTO);
+
+            }
+
+            tarefasRepository.saveAll(tarefasRecorrentes);
+        } else if (tarefaOriginal.getRecurrenceID() == null) {
+            // Caso a tarefa não seja recorrente, atualize normalmente
+            tarefaOriginal.update(tarefaUpdateDTO);
+
         }
 
-        // Salvar alterações na tarefa original e retornar DTO atualizado
+        // Persistir e retornar a tarefa atualizada
         tarefasRepository.save(tarefaOriginal);
         return new TarefaReadDTO(tarefaOriginal);
     }
 
-    private void atualizarTarefa(Tarefa tarefa, TarefaUpdateDTO tarefaUpdateDTO) {
-        // Aplicar atualizações na tarefa a partir do DTO
-        tarefa.update(tarefaUpdateDTO);
-        tarefasRepository.save(tarefa);
-    }
 
 
 
