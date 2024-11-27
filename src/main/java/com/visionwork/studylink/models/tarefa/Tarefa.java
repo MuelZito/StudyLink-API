@@ -5,9 +5,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.visionwork.studylink.dto.tarefa.insert.TarefaUpdateDTO;
 import com.visionwork.studylink.models.usuario.Usuario;
 import jakarta.persistence.*;
+import org.springframework.cglib.core.Local;
 
-import java.awt.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,9 +21,9 @@ public class Tarefa {
     private LocalDateTime dataInicio;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dataFim;
-    @Enumerated(EnumType.STRING)
-    private PrioridadeType prioridade;
-    private String color;
+    private String recurrenceRule;
+    private Long recurrenceID;
+    private String recurrenceException;
     @ManyToOne
     @JsonBackReference
     private Usuario usuario;
@@ -32,18 +31,19 @@ public class Tarefa {
     public Tarefa() {
     }
 
+
     public Tarefa(Long id, String titulo, String descricao, LocalDateTime dataInicio, LocalDateTime dataFim,
-                   PrioridadeType prioridade,  String color, Usuario usuario) {
+                  String recurrenceRule, Long recurrenceID, String recurrenceException, Usuario usuario) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
-        this.prioridade = prioridade;
-        this.color = color;
+        this.recurrenceRule = recurrenceRule;
+        this.recurrenceID = recurrenceID;
+        this.recurrenceException = recurrenceException;
         this.usuario = usuario;
     }
-
 
     public Long getId() {
         return id;
@@ -52,37 +52,75 @@ public class Tarefa {
     public String getTitulo() {
         return titulo;
     }
+     public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 
     public String getDescricao() {
         return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public LocalDateTime getDataInicio() {
         return dataInicio;
     }
 
+    public void setDataInicio(LocalDateTime dataInicio) {
+         this.dataInicio = dataInicio;
+    }
+
     public LocalDateTime getDataFim() {
         return dataFim;
     }
 
-
-    public PrioridadeType getPrioridade() {
-        return prioridade;
+    public void setDataFim(LocalDateTime dataFim) {
+         this.dataFim = dataFim;
     }
 
-    public String getColor() {return  color;}
+    public String getRecurrenceRule() {
+        return recurrenceRule;
+    }
+
+    public void setRecurrenceRule(String recurrenceRule) {
+        this.recurrenceRule = recurrenceRule;
+    }
+
+    public Long getRecurrenceID() {
+        return recurrenceID;
+    }
+
+    public void setRecurrenceID(Long recurrenceID) {
+        this.recurrenceID = recurrenceID;
+    }
+
+    public String getRecurrenceException() {
+        return recurrenceException;
+    }
+
+    public void setRecurrenceException(String recurrenceException) {
+        this.recurrenceException = recurrenceException;
+    }
+
 
     public Usuario getUsuario() {
         return usuario;
     }
 
+
+
+
     public void update(TarefaUpdateDTO tarefaAtualizada) {
+        this.id = tarefaAtualizada.id();
         this.titulo = tarefaAtualizada.titulo();
         this.descricao = tarefaAtualizada.descricao();
         this.dataInicio = tarefaAtualizada.dataInicio();
         this.dataFim = tarefaAtualizada.dataFim();
-        this.prioridade = tarefaAtualizada.prioridade();
-        this.color = tarefaAtualizada.color();
+        this.recurrenceRule = tarefaAtualizada.recurrenceRule();
+        this.recurrenceID = tarefaAtualizada.recurrenceID();
+        this.recurrenceException = tarefaAtualizada.recurrenceException();
     }
 
     public static final class Builder {
@@ -90,8 +128,9 @@ public class Tarefa {
         private String descricao;
         private LocalDateTime dataInicio;
         private LocalDateTime dataFim;
-        private PrioridadeType prioridade;
-        private String color;
+        private String recurrenceRule;
+        private Long recurrenceID;
+        private String recurrenceException;
         private Usuario usuario;
 
         public Builder() {
@@ -117,12 +156,18 @@ public class Tarefa {
             return this;
         }
 
-        public Builder prioridade(PrioridadeType prioridade) {
-            this.prioridade = prioridade;
+        public Builder recurrenceRule(String recurrenceRule) {
+            this.recurrenceRule = recurrenceRule;
             return this;
         }
-        public Builder color(String color) {
-            this.color = color;
+
+        public Builder recurrenceID(Long recurrenceID) {
+            this.recurrenceID = recurrenceID;
+            return this;
+        }
+
+        public Builder recurrenceException(String recurrenceException) {
+            this.recurrenceException = recurrenceException;
             return this;
         }
 
@@ -132,7 +177,8 @@ public class Tarefa {
         }
 
         public Tarefa build() {
-            return new Tarefa(null, titulo, descricao, dataInicio, dataFim, prioridade,color, usuario);
+            return new Tarefa(null, titulo, descricao, dataInicio, dataFim,
+                    recurrenceRule, recurrenceID, recurrenceException, usuario);
         }
     }
 }

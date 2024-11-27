@@ -1,18 +1,15 @@
 package com.visionwork.studylink.dto.tarefa.insert;
 
-import com.visionwork.studylink.models.tarefa.PrioridadeType;
-import com.visionwork.studylink.models.tarefa.StatusType;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record TarefaUpdateDTO(
+        Long id,
         String titulo,
         String descricao,
         LocalDateTime dataInicio,
         LocalDateTime dataFim,
-        PrioridadeType prioridade,
-        String color
-
+        String recurrenceRule,
+        Long recurrenceID,
+        String recurrenceException
 ) {
 }

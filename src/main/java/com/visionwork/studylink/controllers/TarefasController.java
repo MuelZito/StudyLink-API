@@ -8,8 +8,10 @@ import com.visionwork.studylink.services.TarefaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -26,20 +28,31 @@ public class TarefasController {
     }
 
     @DeleteMapping("/tarefas/{id}")
-    public ResponseEntity<String> deletarTarefa(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarTarefa(@PathVariable Long id) {
         tarefaService.deletarById(id);
-        return ResponseEntity.ok("Tarefa deletada com sucesso.");
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/tarefas/{id}")
-    public ResponseEntity<TarefaReadDTO> alterarTarefa(@PathVariable Long id,@RequestBody TarefaUpdateDTO tarefa){
-        TarefaReadDTO tarefaAtualizada = tarefaService.alterarTarefa(id, tarefa);
+    public ResponseEntity<TarefaReadDTO> alterarTarefa(
+            @PathVariable Long id,
+            @RequestBody TarefaUpdateDTO tarefa,
+            @RequestParam(required = false, defaultValue = "false") boolean editarRecorrenciaInteira) {
+
+        // Chamar o método do serviço com os parâmetros necessários
+        TarefaReadDTO tarefaAtualizada = tarefaService.alterarTarefa(id, tarefa, editarRecorrenciaInteira);
+
+        // Retornar a resposta com o DTO atualizado
         return ResponseEntity.ok(tarefaAtualizada);
     }
 
+
     @GetMapping(value = "/tarefas/{dataInicio}/{dataFim}")
-    public ResponseEntity<List<TarefaReadDTO>> buscarTarefas(@PathVariable("dataInicio") LocalDate dataInicio, @PathVariable("dataFim") LocalDate dataFim){
-        List<TarefaReadDTO> tarefas = tarefaService.buscarTarefas(dataInicio,dataFim);
+    public ResponseEntity<List<TarefaReadDTO>> buscarTarefas(
+            @PathVariable("dataInicio") LocalDateTime dataInicio,
+            @PathVariable("dataFim") LocalDateTime dataFim
+    ){
+        List<TarefaReadDTO> tarefas = tarefaService.buscarTarefas(dataInicio, dataFim);
         return ResponseEntity.ok(tarefas);
     }
 
