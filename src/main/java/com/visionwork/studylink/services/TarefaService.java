@@ -59,33 +59,33 @@ public class TarefaService {
         Tarefa tarefaOriginal = tarefasRepository.findByIdAndUsuario(tarefaUpdateDTO.recurrenceID(), principal)
                 .orElseThrow(() -> new AccessDeniedException("Tarefa não encontrada ou sem permissão"));
 
-        // Resto do código de criação da nova tarefa permanece o mesmo
+        // Criar uma nova tarefa com as atualizações
         Tarefa novaTarefa = new Tarefa.Builder()
+                .id(id)
                 .titulo(tarefaUpdateDTO.titulo())
                 .descricao(tarefaUpdateDTO.descricao())
                 .dataInicio(tarefaUpdateDTO.dataInicio())
                 .dataFim(tarefaUpdateDTO.dataFim())
-                .recurrenceRule(tarefaOriginal.getRecurrenceRule())
                 .recurrenceID(tarefaOriginal.getId())
+                .recurrenceException(getRecurrenceExceptionString(tarefaOriginal.getRecurrenceException(), tarefaUpdateDTO.dataInicio()))
                 .usuario(principal)
                 .build();
 
-        // Atualização da exceção de recorrência
-        if (tarefaOriginal.getRecurrenceException() == null) {
-            tarefaOriginal.setRecurrenceException(tarefaUpdateDTO.dataInicio().toString());
-        } else {
-            tarefaOriginal.setRecurrenceException(
-                    tarefaOriginal.getRecurrenceException() + "," + tarefaUpdateDTO.dataInicio().toString()
-            );
-        }
+        // Salvar a nova tarefa
+        Tarefa atualizadaTarefa = tarefasRepository.save(novaTarefa);
 
-        // Salva ambas as tarefas
-        tarefasRepository.save(tarefaOriginal);
-        novaTarefa = tarefasRepository.save(novaTarefa);
-
-        return new TarefaReadDTO(novaTarefa);
+        return new TarefaReadDTO(atualizadaTarefa);
     }
 
+    private String getRecurrenceExceptionString(String existingExceptions, LocalDateTime newExceptionDate) {
+        if (existingExceptions == null || existingExceptions.isEmpty()) {
+            return newExceptionDate.toString();
+        } else if (!existingExceptions.contains(newExceptionDate.toString())) {
+            return existingExceptions + "," + newExceptionDate.toString();
+        } else {
+            throw new IllegalArgumentException("Ocorrência já editada previamente.");
+        }
+    }
 
 
 

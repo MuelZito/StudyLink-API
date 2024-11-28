@@ -49,11 +49,6 @@ public class TarefasController {
 
         return ResponseEntity.ok(tarefaAtualizada);
     }
-
-
-
-
-
     @GetMapping(value = "/tarefas/{dataInicio}/{dataFim}")
     public ResponseEntity<List<TarefaReadDTO>> buscarTarefas(
             @PathVariable("dataInicio") LocalDateTime dataInicio,

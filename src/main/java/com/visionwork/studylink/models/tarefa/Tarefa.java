@@ -109,9 +109,6 @@ public class Tarefa {
         return usuario;
     }
 
-
-
-
     public void update(TarefaUpdateDTO tarefaAtualizada) {
         this.id = tarefaAtualizada.id();
         this.titulo = tarefaAtualizada.titulo();
@@ -124,6 +121,7 @@ public class Tarefa {
     }
 
     public static final class Builder {
+        private Long id;
         private String titulo;
         private String descricao;
         private LocalDateTime dataInicio;
@@ -135,6 +133,12 @@ public class Tarefa {
 
         public Builder() {
         }
+
+        public Builder id(Long id){
+            this.id = id;
+            return this;
+        }
+
 
         public Builder titulo(String titulo) {
             this.titulo = titulo;
