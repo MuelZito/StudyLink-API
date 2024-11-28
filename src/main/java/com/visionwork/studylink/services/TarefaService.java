@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -59,22 +61,25 @@ public class TarefaService {
         Tarefa tarefaOriginal = tarefasRepository.findByIdAndUsuario(tarefaUpdateDTO.recurrenceID(), principal)
                 .orElseThrow(() -> new AccessDeniedException("Tarefa não encontrada ou sem permissão"));
 
-        // Criar uma nova tarefa com as atualizações
+        // Atualizar a tarefa pai com a nova recurrenceException
+        String updatedRecurrenceException = getRecurrenceExceptionString(tarefaOriginal.getRecurrenceException(), tarefaUpdateDTO.dataInicio());
+        tarefaOriginal.setRecurrenceException(updatedRecurrenceException);
+        tarefasRepository.save(tarefaOriginal);
+
+        // Criar uma nova tarefa para a ocorrência única
         Tarefa novaTarefa = new Tarefa.Builder()
-                .id(id)
                 .titulo(tarefaUpdateDTO.titulo())
                 .descricao(tarefaUpdateDTO.descricao())
                 .dataInicio(tarefaUpdateDTO.dataInicio())
                 .dataFim(tarefaUpdateDTO.dataFim())
                 .recurrenceID(tarefaOriginal.getId())
-                .recurrenceException(getRecurrenceExceptionString(tarefaOriginal.getRecurrenceException(), tarefaUpdateDTO.dataInicio()))
                 .usuario(principal)
                 .build();
 
         // Salvar a nova tarefa
-        Tarefa atualizadaTarefa = tarefasRepository.save(novaTarefa);
+        Tarefa tarefaSalva = tarefasRepository.save(novaTarefa);
 
-        return new TarefaReadDTO(atualizadaTarefa);
+        return new TarefaReadDTO(tarefaSalva);
     }
 
     private String getRecurrenceExceptionString(String existingExceptions, LocalDateTime newExceptionDate) {
@@ -86,6 +91,7 @@ public class TarefaService {
             throw new IllegalArgumentException("Ocorrência já editada previamente.");
         }
     }
+
 
 
 
@@ -125,17 +131,36 @@ public class TarefaService {
     }
 
 
-
-
-
-
-
     @Transactional(readOnly = true)
     public List<TarefaReadDTO> buscarTarefas(LocalDateTime dataInicio, LocalDateTime dataFim) {
         Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        // Buscar todas as tarefas no intervalo de datas
         List<Tarefa> tarefas = tarefasRepository.findByUsuarioAndDataFimBetween(principal, dataInicio, dataFim);
-        return tarefas.stream().map(tarefa -> new TarefaReadDTO(tarefa)).collect(Collectors.toList());
+
+        // Filtrar tarefas
+        List<Tarefa> tarefasFiltradas = tarefas.stream()
+                .filter(tarefa -> {
+                    // Se a tarefa tem RecurrenceID (é uma ocorrência de uma tarefa recorrente)
+                    if (tarefa.getRecurrenceID() != null) {
+                        // Se tem exceções
+                        if (tarefa.getRecurrenceException() != null && !tarefa.getRecurrenceException().isEmpty()) {
+                            // Converte a data da tarefa para string no mesmo formato da exceção
+                            String dataInicioStr = tarefa.getDataInicio().toString();
+
+                            // Verifica se esta ocorrência específica está na lista de exceções
+                            return !Arrays.stream(tarefa.getRecurrenceException().split(","))
+                                    .anyMatch(excecao -> excecao.equals(dataInicioStr));
+                        }
+                    }
+                    return true;
+                })
+                .collect(Collectors.toList());
+
+        // Mapear para o DTO de leitura
+        return tarefasFiltradas.stream()
+                .map(TarefaReadDTO::new)
+                .collect(Collectors.toList());
     }
 
 

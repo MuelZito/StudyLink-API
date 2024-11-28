@@ -21,6 +21,8 @@ public interface TarefasRepository extends JpaRepository<Tarefa, Long> {
 
     Optional<Tarefa> findByIdAndRecurrenceIDAndUsuario(Long id, Long recurrenceID, Usuario usuario);
 
+
     // Buscar tarefas que possuem um RecurrenceException específico
-    List<Tarefa> findByRecurrenceExceptionContaining(String recurrenceException);
+
+
 }

@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @Entity
 @Table(name = "tarefas")
@@ -29,6 +30,33 @@ public class Tarefa {
     private Usuario usuario;
 
     public Tarefa() {
+    }
+
+    // Adicione este método para verificar se a tarefa é uma ocorrência de exceção
+    public boolean isOcorrenciaExcecao(LocalDateTime dataInicio) {
+        if (this.recurrenceException == null || this.recurrenceException.isEmpty()) {
+            return false;
+        }
+
+        // Converte a data de início para o formato de string usado no banco
+        String dataInicioStr = dataInicio.toLocalDate().toString() + "T" +
+                dataInicio.toLocalTime().withSecond(0).withNano(0).toString();
+
+        // Verifica se a data está na lista de exceções
+        return Arrays.stream(this.recurrenceException.split(","))
+                .map(String::trim)
+                .anyMatch(excecao -> excecao.equals(dataInicioStr));
+    }
+
+    // Adicione um método para obter a tarefa original de uma ocorrência
+    public Tarefa getTarefaOriginal() {
+        if (this.recurrenceID == null) {
+            return null;
+        }
+
+        // No serviço, você precisará implementar a lógica de buscar a tarefa original
+        // Pode ser adicionado um método no repositório para buscar pelo recurrenceID
+        return null;
     }
 
 
