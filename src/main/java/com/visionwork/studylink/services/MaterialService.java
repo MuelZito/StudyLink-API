@@ -1,9 +1,7 @@
 package com.visionwork.studylink.services;
 
-import com.visionwork.studylink.dto.material.MaterialCreateDTO;
-import com.visionwork.studylink.dto.material.MaterialReadDTO;
-import com.visionwork.studylink.dto.material.MaterialSearchDTO;
-import com.visionwork.studylink.dto.material.MaterialUpdateDTO;
+import com.visionwork.studylink.dto.material.*;
+import com.visionwork.studylink.models.material.Anotacao;
 import com.visionwork.studylink.models.material.Material;
 import com.visionwork.studylink.models.material.Visibilidade;
 import com.visionwork.studylink.models.tarefa.Tarefa;
@@ -94,11 +92,41 @@ public class MaterialService {
     }
 
     @Transactional
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Material material = materialRepository.findByIdAndUsuario(id, principal).
                 orElseThrow(() -> new AccessDeniedException("Você não tem permissão pra deletar essa tarefa"));
         materialRepository.delete(material);
     }
+
+    @Transactional
+    public AnotacaoReadDTO adicionarAnotacao(Long materialId, AnotacaoCreateDTO anotacaoCreateDTO) {
+        Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Material material = materialRepository.findByIdAndUsuario(materialId, principal).
+                orElseThrow(() -> new IllegalArgumentException("Você não pode alterar esse material"));
+
+        Anotacao anotacao = new Anotacao.Builder()
+                .titulo(anotacaoCreateDTO.titulo())
+                .conteudo(anotacaoCreateDTO.conteudo())
+                .material(material)
+                .build();
+
+        material.setAnotacao(anotacao);
+        materialRepository.save(material);
+
+        return new AnotacaoReadDTO(anotacao);
+    }
+
+    @Transactional
+    public AnotacaoReadDTO buscarAnotacao(Long materialId) {
+        Material material = materialRepository.findById(materialId)
+                .orElseThrow(() -> new IllegalArgumentException("Material não encontrado."));
+        if (material.getAnotacao() == null) {
+            throw new IllegalArgumentException("Nenhuma anotação associada a este material.");
+        }
+        return new AnotacaoReadDTO(material.getAnotacao());
+    }
+
 
 }

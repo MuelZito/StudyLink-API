@@ -1,14 +1,13 @@
 package com.visionwork.studylink.controllers;
 
 
-import com.visionwork.studylink.dto.material.MaterialCreateDTO;
-import com.visionwork.studylink.dto.material.MaterialReadDTO;
-import com.visionwork.studylink.dto.material.MaterialSearchDTO;
-import com.visionwork.studylink.dto.material.MaterialUpdateDTO;
+import com.visionwork.studylink.dto.material.*;
 import com.visionwork.studylink.models.material.Material;
 import com.visionwork.studylink.services.MaterialService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +20,6 @@ public class MaterialController {
 
     @Autowired
     MaterialService materialService;
-    private Material material;
-
     @GetMapping( value = "materiais/descobrir")
     public ResponseEntity<List<MaterialReadDTO>> listarMateriaisPublicos() {
         List<MaterialReadDTO> materiaispublicos = materialService.listarMateriaisPublicos();
@@ -60,5 +57,18 @@ public class MaterialController {
         materialService.deleteById(id);
         return ResponseEntity.ok("Material deletado com sucesso!");
     }
+
+    @PostMapping("/{material_id}/anotacao")
+    public ResponseEntity<AnotacaoReadDTO> adicionarAnotacao(@PathVariable("material_id") Long materialId,@RequestBody AnotacaoCreateDTO anotacaoCreateDTO){
+        AnotacaoReadDTO anotacao = materialService.adicionarAnotacao(materialId, anotacaoCreateDTO);
+        return ResponseEntity.ok(anotacao);
+    }
+
+    @GetMapping("/{materialId}/anotacao")
+    public ResponseEntity<AnotacaoReadDTO> buscarAnotacao(@PathVariable("material_id") Long materialId) {
+        AnotacaoReadDTO anotacao = materialService.buscarAnotacao(materialId);
+        return ResponseEntity.ok(anotacao);
+    }
+
 
 }

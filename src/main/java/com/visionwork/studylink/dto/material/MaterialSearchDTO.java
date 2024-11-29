@@ -8,8 +8,7 @@ public record MaterialSearchDTO(
         String areaConhecimento,
         String imagemBanner,
         Visibilidade visibilidade,
-        String usuarioDono
-) {
+        String usuarioDono) {
     public MaterialSearchDTO(Material material) {
         this(
                 material.getTitulo(),
@@ -17,5 +16,6 @@ public record MaterialSearchDTO(
                 material.getImagemBanner(),
                 material.getVisibilidade(),
                 material.getUsuario().getNomeUsuario());
+
     }
 }

@@ -2,6 +2,7 @@ package com.visionwork.studylink.models.material;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.visionwork.studylink.dto.material.MaterialUpdateDTO;
 import com.visionwork.studylink.models.usuario.Usuario;
 import jakarta.persistence.*;
@@ -25,8 +26,8 @@ public class Material {
     @ManyToOne
     @JsonBackReference
     private Usuario usuario;
-    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL)
-    private List<Anotacao> anotacoes;
+    @OneToOne(mappedBy = "material", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Anotacao anotacao;
 
     public Material() {
     }
@@ -65,8 +66,12 @@ public class Material {
         return usuario;
     }
 
-    public List<Anotacao> getAnotacoes() {
-        return anotacoes;
+    public Anotacao getAnotacao() {
+        return anotacao;
+    }
+
+    public void setAnotacao(Anotacao anotacao) {
+        this.anotacao = anotacao;
     }
 
     public void update(MaterialUpdateDTO materialAtualizado) {
@@ -84,7 +89,6 @@ public class Material {
         private Visibilidade visibilidade = Visibilidade.PRIVADO;
 
         private Usuario usuario;
-        private List<Anotacao> anotacoes;
 
         public Builder() {
         }
@@ -116,11 +120,6 @@ public class Material {
 
         public Builder usuario(Usuario usuario) {
             this.usuario = usuario;
-            return this;
-        }
-
-        public Builder anotacoes(List<Anotacao> anotacoes) {
-            this.anotacoes = anotacoes;
             return this;
         }
 

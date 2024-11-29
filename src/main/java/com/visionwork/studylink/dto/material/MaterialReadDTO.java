@@ -12,15 +12,15 @@ public class MaterialReadDTO {
     private String areaConhecimento;
     private String imagemBanner;
     private Visibilidade visibilidade;
-    private List<Anotacao> anotacoes;
+    private Anotacao anotacao;
 
-    public MaterialReadDTO(Long id, String titulo, String areaConhecimento, String imagemBanner, Visibilidade visibilidade, List<Anotacao> anotacoes) {
+    public MaterialReadDTO(Long id, String titulo, String areaConhecimento, String imagemBanner, Visibilidade visibilidade, Anotacao anotacao) {
         this.id = id;
         this.titulo = titulo;
         this.areaConhecimento = areaConhecimento;
         this.imagemBanner = imagemBanner;
         this.visibilidade = visibilidade;
-        this.anotacoes = anotacoes;
+        this.anotacao = anotacao;
     }
 
     public MaterialReadDTO(Material material) {
@@ -29,7 +29,7 @@ public class MaterialReadDTO {
         this.areaConhecimento = material.getAreaConhecimento();
         this.imagemBanner = material.getImagemBanner();
         this.visibilidade = material.getVisibilidade();
-        this.anotacoes = material.getAnotacoes();
+        this.anotacao = material.getAnotacao();
     }
 
     public Long getId() {
@@ -52,7 +52,7 @@ public class MaterialReadDTO {
         return visibilidade;
     }
 
-    public List<Anotacao> getAnotacoes() {
-        return anotacoes;
+    public Anotacao getAnotacao() {
+        return anotacao;
     }
 }
