@@ -27,7 +27,6 @@ public class MaterialService {
 
     @Transactional
     public List<MaterialReadDTO> listarMateriaisPublicos() {
-        // Supondo que você tenha um repositório de Material
         List<Material> materiais = materialRepository.findAll();
 
         // Filtra apenas os materiais com visibilidade PUBLICO
