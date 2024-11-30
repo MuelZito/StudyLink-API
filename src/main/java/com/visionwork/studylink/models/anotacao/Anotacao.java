@@ -1,5 +1,6 @@
 package com.visionwork.studylink.models.anotacao;
 
+import com.visionwork.studylink.models.material.Material;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,6 +27,11 @@ public class Anotacao {
 
     private LocalDateTime dataCriacao;
     private LocalDateTime dataAtualizacao;
+
+    // Adicione a propriedade material
+    @ManyToOne
+    @JoinColumn(name = "material_id")
+    private Material material; // Relacionamento com a entidade Material
 
     @PrePersist
     protected void onCreate() {
