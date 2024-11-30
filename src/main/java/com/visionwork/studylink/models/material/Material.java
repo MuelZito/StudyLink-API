@@ -3,6 +3,7 @@ package com.visionwork.studylink.models.material;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.visionwork.studylink.dto.material.MaterialUpdateDTO;
+import com.visionwork.studylink.models.anotacao.Anotacao;
 import com.visionwork.studylink.models.usuario.Usuario;
 import jakarta.persistence.*;
 

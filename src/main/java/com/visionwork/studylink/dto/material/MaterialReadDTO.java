@@ -1,6 +1,5 @@
 package com.visionwork.studylink.dto.material;
 
-import com.visionwork.studylink.models.material.Anotacao;
 import com.visionwork.studylink.models.material.Material;
 import com.visionwork.studylink.models.material.Visibilidade;
 
@@ -12,15 +11,13 @@ public class MaterialReadDTO {
     private String areaConhecimento;
     private String imagemBanner;
     private Visibilidade visibilidade;
-    private List<Anotacao> anotacoes;
 
-    public MaterialReadDTO(Long id, String titulo, String areaConhecimento, String imagemBanner, Visibilidade visibilidade, List<Anotacao> anotacoes) {
+    public MaterialReadDTO(Long id, String titulo, String areaConhecimento, String imagemBanner, Visibilidade visibilidade) {
         this.id = id;
         this.titulo = titulo;
         this.areaConhecimento = areaConhecimento;
         this.imagemBanner = imagemBanner;
         this.visibilidade = visibilidade;
-        this.anotacoes = anotacoes;
     }
 
     public MaterialReadDTO(Material material) {
@@ -29,7 +26,6 @@ public class MaterialReadDTO {
         this.areaConhecimento = material.getAreaConhecimento();
         this.imagemBanner = material.getImagemBanner();
         this.visibilidade = material.getVisibilidade();
-        this.anotacoes = material.getAnotacoes();
     }
 
     public Long getId() {
@@ -52,7 +48,5 @@ public class MaterialReadDTO {
         return visibilidade;
     }
 
-    public List<Anotacao> getAnotacoes() {
-        return anotacoes;
-    }
+
 }

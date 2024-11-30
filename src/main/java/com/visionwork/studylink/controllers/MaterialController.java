@@ -23,7 +23,7 @@ public class MaterialController {
     MaterialService materialService;
     private Material material;
 
-    @GetMapping( value = "materiais/descobrir")
+    @GetMapping( value = "/ materiais/descobrir")
     public ResponseEntity<List<MaterialReadDTO>> listarMateriaisPublicos() {
         List<MaterialReadDTO> materiaispublicos = materialService.listarMateriaisPublicos();
         System.out.println("publicos " + materiaispublicos);
