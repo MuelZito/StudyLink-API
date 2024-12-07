@@ -40,7 +40,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (token != null) {
             try {
-                var login = tokenService.validacaoToken(token);
+                var login = tokenService.validarToken(token);
                 System.out.println("Login extraído do token: " + login);
 
                 if (login != null) {
