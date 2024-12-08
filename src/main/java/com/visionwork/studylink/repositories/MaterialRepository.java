@@ -1,5 +1,6 @@
 package com.visionwork.studylink.repositories;
 
+import com.visionwork.studylink.models.anotacao.Anotacao;
 import com.visionwork.studylink.models.material.Material;
 import com.visionwork.studylink.models.material.Visibilidade;
 import com.visionwork.studylink.models.usuario.Usuario;

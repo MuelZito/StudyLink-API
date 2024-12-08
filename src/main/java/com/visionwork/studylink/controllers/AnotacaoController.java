@@ -24,7 +24,7 @@ public class AnotacaoController {
     ) {
         try {
             // Validate input
-            if (anotacaoCreateDTO.titulo() == null || anotacaoCreateDTO.idMaterial() == null) {
+            if (anotacaoCreateDTO.titulo() == null || anotacaoCreateDTO.materialId() == null) {
                 return ResponseEntity.badRequest().body("Título e ID do material são obrigatórios");
             }
 

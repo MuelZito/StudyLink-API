@@ -25,11 +25,11 @@
 
         @Transactional
         public AnotacaoReadDTO criarAnotacao(AnotacaoCreateDTO dto) {
-            Material material = materialRepository.findById(dto.idMaterial())
+            Material material = materialRepository.findById(dto.materialId())
                     .orElseThrow(() -> new NoSuchElementException("Material não encontrado"));
 
             Anotacao anotacao = new Anotacao.Builder()
-                    .idMaterial(material)
+                    .material(material)
                     .titulo(dto.titulo())
                     .dataUltimaAlteracao(dto.dataUltimaAlteracao())
                     .build();

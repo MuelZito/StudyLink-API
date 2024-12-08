@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface AnotacaoRepository extends JpaRepository<Anotacao, Long> {
     List<Anotacao> findByMaterialId(Long id);
+
+
 }
