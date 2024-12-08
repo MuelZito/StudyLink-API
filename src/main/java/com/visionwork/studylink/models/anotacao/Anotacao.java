@@ -28,9 +28,7 @@ public class Anotacao {
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dataUltimaAlteracao;
 
-
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "arquivo_id", unique = true)
+    @OneToOne(mappedBy = "anotacao", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Arquivo arquivo;
 

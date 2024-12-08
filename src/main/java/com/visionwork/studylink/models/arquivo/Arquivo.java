@@ -31,17 +31,8 @@ public class Arquivo {
             String primeiraLinha = extrairPrimeiraLinha(conteudo);
             anotacao.setTitulo(primeiraLinha);
             anotacao.setDataUltimaAlteracao(LocalDateTime.now());
-
-            // Força a sincronização
-            if (anotacao != null) {
-                EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
-                EntityManager em = emf.createEntityManager();
-                em.merge(anotacao);
-                em.flush();
-            }
         }
     }
-
 
     private String extrairPrimeiraLinha(String conteudoQuill) {
         try {
