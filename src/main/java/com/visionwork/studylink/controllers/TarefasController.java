@@ -5,6 +5,7 @@ import com.visionwork.studylink.dto.tarefa.insert.TarefaCreateDTO;
 import com.visionwork.studylink.dto.tarefa.insert.TarefaUpdateDTO;
 import com.visionwork.studylink.dto.tarefa.read.TarefaReadDTO;
 import com.visionwork.studylink.services.TarefaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class TarefasController {
     TarefaService tarefaService;
 
     @PostMapping(value = "/tarefas")
-    public ResponseEntity<TarefaReadDTO> inserirTarefa(@RequestBody TarefaCreateDTO tarefa) {
+    public ResponseEntity<TarefaReadDTO> inserirTarefa(@RequestBody @Valid TarefaCreateDTO tarefa) {
         TarefaReadDTO criarTarefa = tarefaService.criarTarefa(tarefa);
         return ResponseEntity.ok(criarTarefa);
     }
@@ -36,7 +37,7 @@ public class TarefasController {
     @PutMapping(value = "/tarefas/{id}")
     public ResponseEntity<TarefaReadDTO> alterarTarefa(
             @PathVariable Long id,
-            @RequestBody TarefaUpdateDTO tarefa,
+            @RequestBody @Valid TarefaUpdateDTO tarefa,
             @RequestParam(required = false, defaultValue = "false") boolean editarRecorrenciaInteira) {
 
         TarefaReadDTO tarefaAtualizada;
