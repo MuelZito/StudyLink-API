@@ -7,6 +7,7 @@ import com.visionwork.studylink.models.usuario.Usuario;
 import com.visionwork.studylink.repositories.UsuarioRepository;
 import com.visionwork.studylink.security.TokenService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,7 +35,7 @@ public class AuthController {
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         if (passwordEncoder.matches(userLoginDTO.senha(), usuario.getSenha())) {
-            String token = this.tokenService.geracaoToke(usuario);
+            String token = this.tokenService.gerarToken(usuario);
 
             ResponseCookie cookie = ResponseCookie.from("token", token)
                     .httpOnly(true)
@@ -65,7 +66,7 @@ public class AuthController {
             novoUsuario.setNomeUsuario(userRegisterDTO.nome_usuario());
             this.repository.save(novoUsuario);
 
-            String token = this.tokenService.geracaoToke(novoUsuario);
+            String token = this.tokenService.gerarToken(novoUsuario);
 
             ResponseCookie cookie = ResponseCookie.from("token", token)
                     .httpOnly(true)
@@ -83,4 +84,5 @@ public class AuthController {
         }
         return ResponseEntity.badRequest().build();
     }
+
 }
