@@ -29,7 +29,6 @@ public class AuthController {
         this.tokenService = tokenService;
     }
 
-    // Método para login utilizando POST
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid UserLoginDTO userLoginDTO) {
         Usuario usuario = this.repository.findByEmail(userLoginDTO.email())

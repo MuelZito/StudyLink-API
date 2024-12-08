@@ -1,49 +1,77 @@
 package com.visionwork.studylink.controllers;
 
-import com.visionwork.studylink.dto.anotacao.AnotacaoDTO;
+import com.visionwork.studylink.dto.anotacao.AnotacaoCreateDTO;
+import com.visionwork.studylink.dto.anotacao.AnotacaoReadDTO;
 import com.visionwork.studylink.services.AnotacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
+
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api")
 public class AnotacaoController {
+
     @Autowired
     private AnotacaoService anotacaoService;
 
-    @PostMapping("/add/atividades")
-    public ResponseEntity<AnotacaoDTO> criarAnotacao(
-            @RequestParam("titulo") String titulo,
-            @RequestParam("conteudo") String conteudo,
-            @RequestParam(value = "arquivos", required = false) List<MultipartFile> arquivos
-    ) throws IOException {
-        AnotacaoDTO anotacaoDTO = new AnotacaoDTO();
-        anotacaoDTO.setTitulo (titulo);
-        anotacaoDTO.setConteudo(conteudo);
+    @PostMapping("/atividades")
+    public ResponseEntity<?> criarAnotacao(
+            @RequestBody AnotacaoCreateDTO anotacaoCreateDTO
+    ) {
+        try {
+            // Validate input
+            if (anotacaoCreateDTO.titulo() == null || anotacaoCreateDTO.idMaterial() == null) {
+                return ResponseEntity.badRequest().body("Título e ID do material são obrigatórios");
+            }
 
-        AnotacaoDTO anotacaoCriada = anotacaoService.criarAnotacao(anotacaoDTO, arquivos);
-        return ResponseEntity.ok(anotacaoCriada);
+            AnotacaoReadDTO anotacaoCriada = anotacaoService.criarAnotacao(anotacaoCreateDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(anotacaoCriada);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar anotação");
+        }
     }
 
-    @GetMapping("/atividades")
-    public ResponseEntity<List<AnotacaoDTO>> listarAnotacoes() {
-        List<AnotacaoDTO> anotacoes = anotacaoService.listarAnotacoes();
-        return ResponseEntity.ok(anotacoes);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> atualizarAnotacao(
+            @PathVariable Long id,
+            @RequestBody AnotacaoCreateDTO dto) {
+        try {
+            AnotacaoReadDTO anotacaoAtualizada = anotacaoService.atualizarAnotacao(id, dto);
+            return ResponseEntity.ok(anotacaoAtualizada);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar anotação");
+        }
     }
 
-    @GetMapping("/atividades/{id}")
-    public ResponseEntity<AnotacaoDTO> buscarAnotacao(@PathVariable Long id) {
-        AnotacaoDTO anotacao = anotacaoService.buscarPorId(id);
-        return ResponseEntity.ok(anotacao);
+    @GetMapping("/materiais/{materialId}/atividades")
+    public ResponseEntity<?> listarAnotacoesPorMaterial(@PathVariable Long materialId) {
+        try {
+            List<AnotacaoReadDTO> anotacoes = anotacaoService.listarAnotacoesPorMaterial(materialId);
+            return ResponseEntity.ok(anotacoes);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar anotações");
+        }
     }
 
-    @DeleteMapping("/atividades/{id}")
-    public ResponseEntity<Void> deletarAnotacao(@PathVariable Long id) {
-        anotacaoService.deletarAnotacao(id);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("atividades/{id}")
+    public ResponseEntity<?> deletarAnotacao(@PathVariable Long id) {
+        try {
+            anotacaoService.deletarAnotacao(id);
+            return ResponseEntity.noContent().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar anotação");
+        }
     }
 }

@@ -7,7 +7,5 @@ import java.util.List;
 
 @Repository
 public interface AnotacaoRepository extends JpaRepository<Anotacao, Long> {
-    List<Anotacao> findByTituloContainingIgnoreCase(String titulo);
-
-    List<Anotacao> findByMaterialId(Long materialId);
+    List<Anotacao> findByMaterialId(Long id);
 }
