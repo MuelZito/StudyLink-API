@@ -26,6 +26,7 @@ public class Material {
     @ManyToOne
     @JsonBackReference
     private Usuario usuario;
+
     @OneToMany(mappedBy = "material", cascade = CascadeType.ALL)
     private List<Anotacao> anotacoes;
 
