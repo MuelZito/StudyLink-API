@@ -37,6 +37,7 @@ public class MaterialService {
     }
 
 
+
     @Transactional
     public MaterialReadDTO criarMaterial(MaterialCreateDTO materialCreateDTO) {
         Usuario principal = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

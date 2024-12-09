@@ -47,6 +47,7 @@ public class MaterialController {
         MaterialReadDTO materialAtualizado = materialService.atualizarMaterial(id, materialUpdateDTO);
         return ResponseEntity.ok(materialAtualizado);
     }
+
     @GetMapping("/materiais/pesquisar")
     public ResponseEntity<List<MaterialSearchDTO>> pesquisarMaterial(
             @RequestParam(required = false) String termoPesquisa) {

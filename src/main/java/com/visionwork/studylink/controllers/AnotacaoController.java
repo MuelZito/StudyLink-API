@@ -37,7 +37,7 @@ public class AnotacaoController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/atividades/{id}")
     public ResponseEntity<?> atualizarAnotacao(
             @PathVariable Long id,
             @RequestBody AnotacaoCreateDTO dto) {
