@@ -51,12 +51,28 @@ public class ArquivoController {
 
     @GetMapping("/anotacao/{anotacaoId}")
     public ResponseEntity<List<ArquivoReadDTO>> buscarArquivosPorAnotacao(@PathVariable Long anotacaoId) {
+        // Log do ID da anotação recebido
+        System.out.println("Recebido anotacaoId: " + anotacaoId);
+
+        // Buscar arquivos associados à anotação
         List<Arquivo> arquivos = arquivoService.buscarArquivosPorAnotacao(anotacaoId);
+
+        // Log do número de arquivos encontrados
+        System.out.println("Número de arquivos encontrados para anotacaoId " + anotacaoId + ": " + arquivos.size());
 
         // Se não houver arquivos, retorne uma lista vazia com status 200 OK
         if (arquivos.isEmpty()) {
+            System.out.println("Nenhum arquivo encontrado para anotacaoId: " + anotacaoId);
             return ResponseEntity.ok(Collections.emptyList()); // Retorna 200 OK com uma lista vazia
         }
+
+        // Log de cada arquivo encontrado
+        arquivos.forEach(arquivo -> {
+            System.out.println("Arquivo encontrado:");
+            System.out.println(" - ID: " + arquivo.getId());
+            System.out.println(" - Conteúdo: " + arquivo.getConteudo());
+            System.out.println(" - Anotacao ID: " + arquivo.getAnotacao().getId());
+        });
 
         // Convertendo os arquivos para ArquivoReadDTO
         List<ArquivoReadDTO> arquivosDTO = arquivos.stream()
@@ -66,8 +82,12 @@ public class ArquivoController {
                         arquivo.getAnotacao().getId()))
                 .toList();
 
+        // Log final antes de retornar
+        System.out.println("Retornando " + arquivosDTO.size() + " arquivos para anotacaoId: " + anotacaoId);
+
         return ResponseEntity.ok(arquivosDTO); // Retorna 200 OK com a lista de arquivos
     }
+
 
 
     // DTO para atualização de arquivo

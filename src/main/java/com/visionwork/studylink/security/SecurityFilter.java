@@ -29,7 +29,12 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        if (request.getMethod().equals("OPTIONS")) {
+        String requestURI = request.getRequestURI();
+
+        // Ignorar endpoints públicos
+        if (requestURI.startsWith("/api/password-reset") ||
+                requestURI.startsWith("/api/login") ||
+                requestURI.startsWith("/api/register")) {
             filterChain.doFilter(request, response);
             return;
         }
