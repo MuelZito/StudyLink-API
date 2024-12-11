@@ -16,6 +16,10 @@ public class Usuario {
     private String nomeUsuario;
     private String email;
     private String senha;
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String imagemPerfil;
+
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     @JsonManagedReference
     List<Tarefa> tarefas;
@@ -62,4 +66,13 @@ public class Usuario {
     public List<Material> getMateriais() {
         return materiais;
     }
+
+    public String getImagemPerfil() {
+        return imagemPerfil;
+    }
+
+    public void setImagemPerfil(String imagemPerfil) {
+        this.imagemPerfil = imagemPerfil;
+    }
+
 }

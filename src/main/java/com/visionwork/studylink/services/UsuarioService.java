@@ -3,6 +3,7 @@ package com.visionwork.studylink.services;
 import com.visionwork.studylink.models.usuario.Usuario;
 import com.visionwork.studylink.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,4 +40,17 @@ public class UsuarioService {
         usuario.setSenha(passwordEncoder.encode(newPassword));
         usuarioRepository.save(usuario);
     }
+
+    @Transactional
+    public void atualizarImagemPerfil(String imagemBase64) {
+        String email = ((Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail();
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado!"));
+
+        usuario.setImagemPerfil(imagemBase64);
+        usuarioRepository.save(usuario);
+    }
+
+
 }

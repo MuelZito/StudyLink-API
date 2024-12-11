@@ -49,7 +49,7 @@ public class AuthController {
 
             return ResponseEntity.ok()
                     .header("Set-Cookie", cookie.toString())
-                    .body(new ReponseDTO(usuario.getNomeUsuario(), usuario.getEmail(), token));
+                    .body(new ReponseDTO(usuario.getNomeUsuario(), usuario.getEmail(), token, usuario.getImagemPerfil()));
         }
 
         return ResponseEntity.badRequest().build();
@@ -78,7 +78,7 @@ public class AuthController {
 
             return ResponseEntity.ok()
                     .header("Set-Cookie", cookie.toString())
-                    .body(new ReponseDTO(novoUsuario.getNomeUsuario(), novoUsuario.getEmail(), token));
+                    .body(new ReponseDTO(novoUsuario.getNomeUsuario(), novoUsuario.getEmail(), token , novoUsuario.getImagemPerfil()));
 
 
         }
